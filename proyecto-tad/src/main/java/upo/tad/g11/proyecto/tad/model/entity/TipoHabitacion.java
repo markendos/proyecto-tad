@@ -1,22 +1,16 @@
-package upo.tad.witzl.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import java.io.Serializable;
 import java.util.Objects;
+import org.bson.types.ObjectId;
 
-/**
- *
- * @author marwi
- *
- * Esta entidad contiene las caracteristicas comunes que tendran las
- * habitaciones del hotel que sean del mismo tipo.
- */
 @Entity
 public class TipoHabitacion implements Serializable {
 
     @Id
-    private Long id; // Identificador unico de una instancia
+    private ObjectId id; // Identificador unico de una instancia
 
     private String nombre; // Nombre del tipo de habitacion: simple, doble, suite...
 
@@ -31,7 +25,7 @@ public class TipoHabitacion implements Serializable {
     }
 
     // Constructor con atributos
-    public TipoHabitacion(Long id, String nombre, Float metros, Boolean terraza,
+    public TipoHabitacion(ObjectId id, String nombre, Float metros, Boolean terraza,
             Float precio) {
         this.id = id;
         this.nombre = nombre;
@@ -42,11 +36,11 @@ public class TipoHabitacion implements Serializable {
 
     // Getters y setters
     
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

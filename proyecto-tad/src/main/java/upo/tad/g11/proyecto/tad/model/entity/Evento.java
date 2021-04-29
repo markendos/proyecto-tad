@@ -1,22 +1,16 @@
-package upo.tad.witzl.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import java.io.Serializable;
 import java.util.Date;
+import org.bson.types.ObjectId;
 
-/**
- *
- * @author marwi
- * 
- * Esta entidad representa un evento que tendra lugar en alguna de las instalaciones
- * del hotel en una fecha concreta
- */
 @Entity
 public class Evento implements Serializable {
 
     @Id
-    private Long id; // Identificador unico de una instancia
+    private ObjectId id; // Identificador unico de una instancia
     
     private String nombre; // Nombre del evento
     
@@ -29,7 +23,7 @@ public class Evento implements Serializable {
     }
 
     // Constructor con atributos
-    public Evento(Long id, String nombre, String descripcion, Date fecha) {
+    public Evento(ObjectId id, String nombre, String descripcion, Date fecha) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -38,11 +32,11 @@ public class Evento implements Serializable {
 
     // Getters y setters
     
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

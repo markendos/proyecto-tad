@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package upo.tad.witzl.proyecto.tad.model.Entity;
+package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;

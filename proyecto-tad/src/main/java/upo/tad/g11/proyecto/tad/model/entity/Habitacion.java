@@ -1,23 +1,18 @@
-package upo.tad.witzl.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import java.io.Serializable;
+import org.bson.types.ObjectId;
 
-/**
- *
- * @author marwi
- *
- * Esta clase representa una habitacion concreta dentro de un hotel.
- */
 @Entity
 public class Habitacion implements Serializable {
 
     @Id
-    private Long id; // Identificador unico de una instancia
-
-    private Integer planta; // Planta del hotel donde esta ubicada la habitacion
+    private ObjectId id; // Identificador unico de una instancia
+    
+    private Integer numero; //Numero de la habitacion
  
     private Boolean fumador; // True si la habitacion es apta para fumadores
 
@@ -29,30 +24,30 @@ public class Habitacion implements Serializable {
     }
 
     // Constructor con atributos
-    public Habitacion(Long id, Integer planta, Boolean fumador,
+    public Habitacion(ObjectId id, Integer numero, Boolean fumador,
             TipoHabitacion tipo) {
         this.id = id;
-        this.planta = planta;
+        this.numero = numero;
         this.fumador = fumador;
         this.tipo = tipo;
     }
 
     // Getters y setters
     
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public Integer getPlanta() {
-        return planta;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setPlanta(Integer planta) {
-        this.planta = planta;
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Boolean getFumador() {
@@ -90,7 +85,7 @@ public class Habitacion implements Serializable {
 
     @Override
     public String toString() {
-        return "Habitacion{" + "id=" + id + ", planta=" + planta + ", fumador="
+        return "Habitacion{" + "id=" + id + ", numero=" + numero + ", fumador="
                 + fumador + ", tipo=" + tipo + '}';
     }
 }
