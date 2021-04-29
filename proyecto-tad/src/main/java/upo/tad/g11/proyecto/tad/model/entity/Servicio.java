@@ -25,7 +25,7 @@ public class Servicio implements Serializable{
     private String nombre;
     private String descripcion;
     private String horario;
-    private double tarifa;
+    private Double tarifa;
 
     /**
      * Constructor
@@ -36,7 +36,7 @@ public class Servicio implements Serializable{
      * @param horario
      * @param tarifa
      */
-    public Servicio(ObjectId id, String nombre, String descripcion, String horario, double tarifa) {
+    public Servicio(ObjectId id, String nombre, String descripcion, String horario, Double tarifa) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -50,7 +50,7 @@ public class Servicio implements Serializable{
      * @param horario
      * @param tarifa 
      */
-    public Servicio(String nombre, String descripcion, String horario, double tarifa) {
+    public Servicio(String nombre, String descripcion, String horario, Double tarifa) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.horario = horario;
@@ -63,11 +63,11 @@ public class Servicio implements Serializable{
     
      */
 
-    public double getTarifa() {
+    public Double getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(float tarifa) {
+    public void setTarifa(Double tarifa) {
         this.tarifa = tarifa;
     }
 
