@@ -1,32 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package upo.tad.g11.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.DAO;
 
 import dev.morphia.Datastore;
 import java.util.List;
-import upo.tad.g11.proyecto.tad.model.entity.Cliente;
+import upo.tad.g11.proyecto.tad.model.entity.Evento;
 
-/**
- * Este DAO se encarga de aplicar las operaciones de los clientes
- *
- *
- * @author Amalio
- */
-public class ClienteDAO implements DAO<Cliente> {
+public class EventoDAO implements DAO<Evento> {
 
     //Definicion de los atributos
     //Conexion con la BD y Coleccion de la BD
-    private Datastore d;
+    private final Datastore d;
 
     /**
      * Constructor que inicializa la coleccion
      *
-     * @param c
      */
-    public ClienteDAO() {
+    public EventoDAO() {
         d = Connection.getConnection();
     }
 
@@ -38,12 +26,12 @@ public class ClienteDAO implements DAO<Cliente> {
      * @return
      */
     @Override
-    public Cliente get(Object id) {
-        Cliente cliente = d.createQuery(Cliente.class)
+    public Evento get(Object id) {
+        Evento evento = d.createQuery(Evento.class)
                 .field("_id")
                 .equal(id).first();
 
-        return cliente;
+        return evento;
     }
 
     /**
@@ -53,10 +41,10 @@ public class ClienteDAO implements DAO<Cliente> {
      * @return
      */
     @Override
-    public List<Cliente> getAll() {
-        List<Cliente> clientes
-                = d.createQuery(Cliente.class).find().toList();
-        return clientes;
+    public List<Evento> getAll() {
+        List<Evento> eventos
+                = d.createQuery(Evento.class).find().toList();
+        return eventos;
     }
 
     /**
@@ -65,7 +53,7 @@ public class ClienteDAO implements DAO<Cliente> {
      * @param t
      */
     @Override
-    public void save(Cliente t) {
+    public void save(Evento t) {
         d.save(t);
     }
 
@@ -73,11 +61,10 @@ public class ClienteDAO implements DAO<Cliente> {
      * Metodo que elimina un Documento en la BD a partir de un id obtenido por
      * parametro
      *
-     * @param id
+     * @param t
      */
     @Override
-    public void delete(Cliente t) {
+    public void delete(Evento t) {
         d.delete(t);
     }
-
 }

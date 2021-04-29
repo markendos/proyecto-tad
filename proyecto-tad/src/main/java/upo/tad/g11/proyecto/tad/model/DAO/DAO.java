@@ -2,7 +2,7 @@
  * En esta interfaz se detallan las acciones minimas que debe realizar un objeto DAO
  * 
  */
-package upo.tad.g11.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.DAO;
 
 import java.util.List;
 
