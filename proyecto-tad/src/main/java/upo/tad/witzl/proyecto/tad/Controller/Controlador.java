@@ -1,0 +1,21 @@
+/*
+ * Esta interfaz define el contenido minimo del controlador
+ */
+package upo.tad.witzl.proyecto.tad.Controller;
+
+/**
+ *
+ * @author Amalio
+ */
+interface Controlador<T> {
+
+    public void add(String args[]);
+
+    public void update(int id, String args[]);
+
+    public void delete(int id);
+
+    public T get(int id);
+
+    public String listar();
+}
