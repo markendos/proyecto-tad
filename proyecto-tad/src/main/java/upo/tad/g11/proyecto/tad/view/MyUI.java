@@ -1,4 +1,4 @@
-package upo.tad.g11.proyecto.tad;
+package upo.tad.g11.proyecto.tad.view;
 
 import javax.servlet.annotation.WebServlet;
 
