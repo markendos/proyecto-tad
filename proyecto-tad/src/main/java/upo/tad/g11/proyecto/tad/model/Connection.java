@@ -6,7 +6,8 @@
 package upo.tad.g11.proyecto.tad.model;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 
 /**
  *
@@ -14,33 +15,15 @@ import com.mongodb.client.MongoDatabase;
  */
 public final class Connection {
 
-    private static Connection instance;
-    public String value;
+    private static Datastore datastore = null;
 
-    // Conectar al servidor MongoDB
-    public MongoClient mongoClient;// = new MongoClient("localhost", 27017);
-
-    // Conectar a la base de datos
-    public MongoDatabase db;// = mongoClient.getDatabase("EPD_EV_2");
-
-    private Connection(String host, int port, String DBname) {
-
-        // Conectar al servidor MongoDB
-        this.mongoClient = new MongoClient(host, port);
-
-        // Conectar a la base de datos
-        this.db = mongoClient.getDatabase(DBname);
-
-    }
-
-    public static Connection getInstance(String host, int port, String DBname) {
-        if (instance == null) {
-            instance = new Connection(host, port, DBname);
+    public static Datastore getConnection() {
+        if (datastore == null) {
+            Morphia morphia = new Morphia();
+            datastore = morphia.createDatastore(new MongoClient(), "TAD_Proyecto");
+            datastore.ensureIndexes();
         }
-        return instance;
+        return datastore;
     }
-    
-    public static void close(){
-        instance.close();
-    }
+
 }
