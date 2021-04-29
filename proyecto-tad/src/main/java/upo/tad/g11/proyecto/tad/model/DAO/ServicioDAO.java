@@ -1,26 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package upo.tad.g11.proyecto.tad.model.DAO;
 
 import dev.morphia.Datastore;
 import java.util.List;
-import upo.tad.g11.proyecto.tad.model.entity.Reserva;
+import upo.tad.g11.proyecto.tad.model.entity.Servicio;
 
 /**
- * Este DAO se encarga de aplicar las operaciones de los reservas
+ * Este DAO se encarga de aplicar las operaciones de los servicios
  *
  *
  * @author Amalio
  */
-public class ReservaDAO implements DAO<Reserva> {
+public class ServicioDAO implements DAO<Servicio> {
 
     //Definicion de los atributos
     //Conexion con la BD y Coleccion de la BD
-    private final Datastore d;
+    private Datastore d;
 
     /**
      * Constructor que inicializa la coleccion
      *
+     * @param c
      */
-    public ReservaDAO() {
+    public ServicioDAO() {
         d = Connection.getConnection();
     }
 
@@ -32,12 +38,12 @@ public class ReservaDAO implements DAO<Reserva> {
      * @return
      */
     @Override
-    public Reserva get(Object id) {
-        Reserva reserva = d.createQuery(Reserva.class)
+    public Servicio get(Object id) {
+        Servicio servicio = d.createQuery(Servicio.class)
                 .field("_id")
                 .equal(id).first();
 
-        return reserva;
+        return servicio;
     }
 
     /**
@@ -47,10 +53,10 @@ public class ReservaDAO implements DAO<Reserva> {
      * @return
      */
     @Override
-    public List<Reserva> getAll() {
-        List<Reserva> reservas
-                = d.createQuery(Reserva.class).find().toList();
-        return reservas;
+    public List<Servicio> getAll() {
+        List<Servicio> servicios
+                = d.createQuery(Servicio.class).find().toList();
+        return servicios;
     }
 
     /**
@@ -59,7 +65,7 @@ public class ReservaDAO implements DAO<Reserva> {
      * @param t
      */
     @Override
-    public void save(Reserva t) {
+    public void save(Servicio t) {
         d.save(t);
     }
 
@@ -67,10 +73,10 @@ public class ReservaDAO implements DAO<Reserva> {
      * Metodo que elimina un Documento en la BD a partir de un id obtenido por
      * parametro
      *
-     * @param t
+     * @param id
      */
     @Override
-    public void delete(Reserva t) {
+    public void delete(Servicio t) {
         d.delete(t);
     }
 

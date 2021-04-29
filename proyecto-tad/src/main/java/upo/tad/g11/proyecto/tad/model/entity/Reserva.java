@@ -20,7 +20,7 @@ public class Reserva implements Serializable {
     private String fechaReserva;
     private String fechaLlegada;
     private String fechaSalida;
-    private double importe;
+    private Double importe;
 
     /**
      * Constructor
@@ -31,7 +31,7 @@ public class Reserva implements Serializable {
      * @param fechaSalida
      * @param importe
      */
-    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, double importe) {
+    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
@@ -46,7 +46,7 @@ public class Reserva implements Serializable {
      * @param fechaSalida
      * @param importe
      */
-    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, double importe) {
+    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe) {
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
@@ -90,28 +90,12 @@ public class Reserva implements Serializable {
         this.fechaSalida = fechaSalida;
     }
 
-    public double getImporte() {
+    public Double getImporte() {
         return importe;
     }
 
-    public void setImporte(double importe) {
+    public void setImporte(Double importe) {
         this.importe = importe;
-    }
-
-    /**
-     * Metodo que transforma un DTO en Documento
-     *
-     * @return new Document()
-     */
-    public Document toDocument() {
-
-        Document d = new Document("id", getId());
-        d.append("fechaReserva", getFechaReserva());
-        d.append("fechaLlegada", getFechaLlegada());
-        d.append("fechaSalida", getFechaSalida());
-        d.append("importe", getImporte());
-        return d;
-
     }
 
     /**
