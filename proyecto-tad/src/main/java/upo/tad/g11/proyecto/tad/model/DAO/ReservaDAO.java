@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package upo.tad.g11.proyecto.tad.model;
+package upo.tad.g11.proyecto.tad.model.DAO;
 
 import dev.morphia.Datastore;
 import java.util.List;
@@ -19,12 +14,11 @@ public class ReservaDAO implements DAO<Reserva> {
 
     //Definicion de los atributos
     //Conexion con la BD y Coleccion de la BD
-    private Datastore d;
+    private final Datastore d;
 
     /**
      * Constructor que inicializa la coleccion
      *
-     * @param c
      */
     public ReservaDAO() {
         d = Connection.getConnection();
