@@ -5,18 +5,30 @@
  */
 package upo.tad.g11.proyecto.tad.model.entity;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+
 /**
+ * En esta clase se representa la estructura de un Hotel
  *
- * @author Propietario
+ * @author Alvaro
  */
+@Entity
 public class Hotel {
-    
+    @Id
     private String id;      //Id para diferenciar los hoteles
     private String nombre;  //Nombre del hotel
     private String ubicacion;   //Ubicación del hotel
     private String calidad;     //Calidad del hotel
 
-    //Tenemos el contructor y los getters, setters y toString típicos
+    /**
+     * Constructor
+     *
+     * @param id
+     * @param nombre
+     * @param ubicacion
+     * @param calidad
+     */
     public Hotel(String id, String nombre, String ubicacion, String calidad) {
         this.id = id;
         this.nombre = nombre;
@@ -56,6 +68,11 @@ public class Hotel {
         this.calidad = calidad;
     }
 
+    /**
+     * Metodo que transforma el objeto DTO en cadena
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Hotel{id=" + id + ", nombre=" + nombre + ", ubicacion=" + ubicacion + ", calidad=" + calidad + '}';

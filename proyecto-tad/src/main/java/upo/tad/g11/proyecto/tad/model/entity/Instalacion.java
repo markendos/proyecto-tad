@@ -5,16 +5,30 @@
  */
 package upo.tad.g11.proyecto.tad.model.entity;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+
 /**
+ * En esta clase se representa la estructura de una Instalacion
  *
- * @author Propietario
+ * @author Alvaro
  */
+@Entity
 public class Instalacion {
+    @Id
     private String id;      //Id de la instalación
     private String nombre;  //Nombre de la instalacion
     private String tipo;   //Tipo de instalación
     private int aforo;      //Aforo de la instalación
 
+    /**
+     * Constructor
+     *
+     * @param dni
+     * @param nombre
+     * @param tipo
+     * @param aforo
+     */
     public Instalacion(String id, String nombre, String tipo, int aforo) {
         this.id = id;
         this.nombre = nombre;
@@ -54,6 +68,11 @@ public class Instalacion {
         this.aforo = aforo;
     }
 
+    /**
+     * Metodo que transforma el objeto DTO en cadena
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Instalacion{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", aforo=" + aforo + '}';

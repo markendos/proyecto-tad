@@ -5,16 +5,30 @@
  */
 package upo.tad.g11.proyecto.tad.model.entity;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+
 /**
+ * En esta clase se representa la estructura del Personal
  *
- * @author Propietario
+ * @author Alvaro
  */
+@Entity
 public class Personal {
+    @Id
     private String id;      //Id del empleado
     private String nombre;  //Nombre del empleado
     private String puesto;   //Puesto del empleado
     private int salario;    //Salario del empleado
 
+    /**
+     * Constructor
+     *
+     * @param id
+     * @param nombre
+     * @param puesto
+     * @param salario
+     */
     public Personal(String id, String nombre, String puesto, int salario) {
         this.id = id;
         this.nombre = nombre;
@@ -54,6 +68,11 @@ public class Personal {
         this.salario = salario;
     }
 
+    /**
+     * Metodo que transforma el objeto DTO en cadena
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "Personal{" + "id=" + id + ", nombre=" + nombre + ", puesto=" + puesto + ", salario=" + salario + '}';
