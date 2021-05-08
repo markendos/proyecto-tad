@@ -59,6 +59,10 @@ public class Servicio implements Serializable{
         this.hotel = hotel;
     }
 
+    public Servicio(){
+        
+    }
+    
     /*
     
     GETTERS Y SETTERS

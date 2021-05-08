@@ -47,6 +47,10 @@ public class Personal {
         this.password = password;
     }
 
+    public Personal() {
+
+    }
+
     public String getId() {
         return id;
     }
