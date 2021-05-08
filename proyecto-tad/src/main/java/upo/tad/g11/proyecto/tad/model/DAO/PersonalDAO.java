@@ -1,6 +1,9 @@
 package upo.tad.g11.proyecto.tad.model.DAO;
 
+import com.mongodb.client.model.Filters;
+import static com.mongodb.client.model.Filters.eq;
 import dev.morphia.Datastore;
+import dev.morphia.query.Query;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Personal;
 
@@ -9,6 +12,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Personal;
  * @author Alvaro
  */
 public class PersonalDAO implements DAO<Personal> {
+
     //Definicion de los atributos
     //Conexion con la BD y Coleccion de la BD
     private final Datastore d;
@@ -69,5 +73,20 @@ public class PersonalDAO implements DAO<Personal> {
     @Override
     public void delete(Personal t) {
         d.delete(t);
+    }
+
+    /**
+     * Metodo que comprueba si existe un usuario conun email y una pass concreta
+     *
+     * @param email
+     * @param pass
+     * @return
+     */
+    public boolean check(String email, String pass) {
+        Personal personal = d.createQuery(Personal.class)
+                .field("email").equal(email)
+                .field("password").equal(pass).first();
+
+        return personal != null;
     }
 }
