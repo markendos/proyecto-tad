@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>upo.tad.witzl</groupId>
+    <groupId>upo.tad.g11</groupId>
     <artifactId>proyecto-tad</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -16,7 +16,7 @@
     <properties>
         <vaadin.version>7.7.7</vaadin.version>
         <vaadin.plugin.version>7.7.7</vaadin.plugin.version>
-        <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
+        <jetty.plugin.version>9.4.28.v20200408</jetty.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
