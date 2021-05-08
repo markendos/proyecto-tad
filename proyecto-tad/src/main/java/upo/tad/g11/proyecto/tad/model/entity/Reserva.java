@@ -2,6 +2,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 import java.io.Serializable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -21,6 +22,8 @@ public class Reserva implements Serializable {
     private String fechaLlegada;
     private String fechaSalida;
     private Double importe;
+    @Reference
+    private Habitacion habitacion;
 
     /**
      * Constructor
@@ -30,13 +33,15 @@ public class Reserva implements Serializable {
      * @param fechaLlegada
      * @param fechaSalida
      * @param importe
+     * @param habitacion
      */
-    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe) {
+    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
         this.importe = importe;
+        this.habitacion = habitacion;
     }
 
     /**
@@ -45,12 +50,14 @@ public class Reserva implements Serializable {
      * @param fechaLlegada
      * @param fechaSalida
      * @param importe
+     * @param habitacion
      */
-    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe) {
+    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion) {
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
         this.importe = importe;
+        this.habitacion = habitacion;
     }
 
     /*
@@ -98,6 +105,14 @@ public class Reserva implements Serializable {
         this.importe = importe;
     }
 
+    public Habitacion getHabitacion() {
+        return habitacion;
+    }
+
+    public void setHabitacion(Habitacion habitacion) {
+        this.habitacion = habitacion;
+    }
+
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -105,7 +120,7 @@ public class Reserva implements Serializable {
      */
     @Override
     public String toString() {
-        return "ReservaDTO{" + "id=" + id + ", fechaReserva=" + fechaReserva + ", fechaLlegada=" + fechaLlegada + ", fechaSalida=" + fechaSalida + ", importe=" + importe + '}';
+        return "Reserva{" + "id=" + id + ", fechaReserva=" + fechaReserva + ", fechaLlegada=" + fechaLlegada + ", fechaSalida=" + fechaSalida + ", importe=" + importe + ", habitacion=" + habitacion.toString() + '}';
     }
 
 }

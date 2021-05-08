@@ -7,6 +7,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 
 /**
  * En esta clase se representa la estructura del Personal
@@ -15,11 +16,16 @@ import dev.morphia.annotations.Id;
  */
 @Entity
 public class Personal {
+
     @Id
     private String id;      //Id del empleado
     private String nombre;  //Nombre del empleado
     private String puesto;   //Puesto del empleado
     private int salario;    //Salario del empleado
+    private String email;
+    private String password;
+    @Reference
+    private Hotel hotel; // Referencia al hotel de la instancia
 
     /**
      * Constructor
@@ -28,12 +34,17 @@ public class Personal {
      * @param nombre
      * @param puesto
      * @param salario
+     * @param email
+     * @param password
      */
-    public Personal(String id, String nombre, String puesto, int salario) {
+    public Personal(String id, String nombre, String puesto, int salario, Hotel hotel, String email, String password) {
         this.id = id;
         this.nombre = nombre;
         this.puesto = puesto;
         this.salario = salario;
+        this.hotel = hotel;
+        this.email = email;
+        this.password = password;
     }
 
     public String getId() {
@@ -68,6 +79,30 @@ public class Personal {
         this.salario = salario;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -75,7 +110,7 @@ public class Personal {
      */
     @Override
     public String toString() {
-        return "Personal{" + "id=" + id + ", nombre=" + nombre + ", puesto=" + puesto + ", salario=" + salario + '}';
+        return "Personal{" + "id=" + id + ", nombre=" + nombre + ", puesto=" + puesto + ", salario=" + salario + ", email=" + email + ", password=*****" + ", hotel=" + hotel.toString() + '}';
     }
-    
+
 }

@@ -2,6 +2,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 import java.io.Serializable;
 import java.util.Date;
 import org.bson.types.ObjectId;
@@ -17,17 +18,21 @@ public class Evento implements Serializable {
     private String descripcion; // Descripcion del evento
     
     private Date fecha; // Fecha de realizacion del evento
+    
+    @Reference
+    private Hotel hotel;
 
     // Constructor por defecto
     public Evento() {
     }
 
     // Constructor con atributos
-    public Evento(ObjectId id, String nombre, String descripcion, Date fecha) {
+    public Evento(ObjectId id, String nombre, String descripcion, Date fecha, Hotel hotel) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.hotel = hotel;
     }
 
     // Getters y setters
@@ -64,6 +69,14 @@ public class Evento implements Serializable {
         this.fecha = fecha;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -83,7 +96,7 @@ public class Evento implements Serializable {
 
     @Override
     public String toString() {
-        return "Evento{" + "id=" + id + ", nombre=" + nombre + ", descripcion="
-                + descripcion + ", fecha=" + fecha + '}';
+        return "Evento{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fecha=" + fecha + ", hotel=" + hotel.toString() + '}';
     }
+    
 }

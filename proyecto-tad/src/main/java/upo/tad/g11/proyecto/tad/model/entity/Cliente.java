@@ -2,7 +2,10 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * En esta clase se representa la estructura de un Cliente
@@ -18,6 +21,8 @@ public class Cliente implements Serializable {
     private String name;
     private String email;
     private String telefono;
+    @Reference
+    private List<Reserva> reservas;
 
     /**
      * Constructor
@@ -26,12 +31,14 @@ public class Cliente implements Serializable {
      * @param name
      * @param email
      * @param telefono
+     * @param reservas
      */
-    public Cliente(String dni, String name, String email, String telefono) {
+    public Cliente(String dni, String name, String email, String telefono, List<Reserva> reservas) {
         this.dni = dni;
         this.name = name;
         this.email = email;
         this.telefono = telefono;
+        this.reservas = reservas;
     }
 
     /**
@@ -39,11 +46,13 @@ public class Cliente implements Serializable {
      * @param name
      * @param email
      * @param telefono
+     * @param reservas
      */
-    public Cliente(String name, String email, String telefono) {
+    public Cliente(String name, String email, String telefono, List<Reserva> reservas) {
         this.name = name;
         this.email = email;
         this.telefono = telefono;
+        this.reservas = reservas;
     }
 
     /*
@@ -83,6 +92,16 @@ public class Cliente implements Serializable {
         this.telefono = telefono;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
+    
+    
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -90,7 +109,7 @@ public class Cliente implements Serializable {
      */
     @Override
     public String toString() {
-        return "\nClienteDTO{" + "id=" + dni + ", name=" + name + ", email=" + email + ", telefono=" + telefono + '}';
+        return "\nClienteDTO{" + "id=" + dni + ", name=" + name + ", email=" + email + ", telefono=" + telefono + ", reservas=" + Arrays.toString(reservas.toArray()) + '}';
     }
 
 }

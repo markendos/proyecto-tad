@@ -19,17 +19,21 @@ public class Habitacion implements Serializable {
     @Reference
     private TipoHabitacion tipo; // Referencia al tipo de habitacion de la instancia
 
+    @Reference
+    private Hotel hotel;
+    
     // Constructor por defecto
     public Habitacion() {
     }
 
     // Constructor con atributos
     public Habitacion(ObjectId id, Integer numero, Boolean fumador,
-            TipoHabitacion tipo) {
+            TipoHabitacion tipo, Hotel hotel) {
         this.id = id;
         this.numero = numero;
         this.fumador = fumador;
         this.tipo = tipo;
+        this.hotel = hotel;
     }
 
     // Getters y setters
@@ -66,6 +70,16 @@ public class Habitacion implements Serializable {
         this.tipo = tipo;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -85,7 +99,8 @@ public class Habitacion implements Serializable {
 
     @Override
     public String toString() {
-        return "Habitacion{" + "id=" + id + ", numero=" + numero + ", fumador="
-                + fumador + ", tipo=" + tipo + '}';
+        return "Habitacion{" + "id=" + id + ", numero=" + numero + ", fumador=" + fumador + ", tipo=" + tipo + ", hotel=" + hotel.toString() + '}';
     }
+
+    
 }

@@ -2,6 +2,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 import java.io.Serializable;
 import org.bson.types.ObjectId;
 
@@ -20,6 +21,8 @@ public class Servicio implements Serializable{
     private String descripcion;
     private String horario;
     private Double tarifa;
+    @Reference
+    private Hotel hotel;
 
     /**
      * Constructor
@@ -29,26 +32,31 @@ public class Servicio implements Serializable{
      * @param descripcion
      * @param horario
      * @param tarifa
+     * @param hotel
      */
-    public Servicio(ObjectId id, String nombre, String descripcion, String horario, Double tarifa) {
+    public Servicio(ObjectId id, String nombre, String descripcion, String horario, Double tarifa, Hotel hotel) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.horario = horario;
         this.tarifa = tarifa;
+        this.hotel = hotel;
     }
+    
     /**
      * 
      * @param nombre
      * @param descripcion
      * @param horario
-     * @param tarifa 
+     * @param tarifa
+     * @param hotel
      */
-    public Servicio(String nombre, String descripcion, String horario, Double tarifa) {
+    public Servicio(String nombre, String descripcion, String horario, Double tarifa, Hotel hotel) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.horario = horario;
         this.tarifa = tarifa;
+        this.hotel = hotel;
     }
 
     /*
@@ -97,6 +105,14 @@ public class Servicio implements Serializable{
         this.horario = horario;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+    
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -104,7 +120,7 @@ public class Servicio implements Serializable{
      */
     @Override
     public String toString() {
-        return "ServicioDTO{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", horario=" + horario + ", tarifa=" + tarifa + '}';
+        return "Servicio{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", horario=" + horario + ", tarifa=" + tarifa + ", hotel=" + hotel.toString() + '}';
     }
 
 }

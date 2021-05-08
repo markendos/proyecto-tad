@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Reference;
 
 /**
  * En esta clase se representa la estructura de una Instalacion
@@ -15,11 +11,14 @@ import dev.morphia.annotations.Id;
  */
 @Entity
 public class Instalacion {
+
     @Id
     private String id;      //Id de la instalación
     private String nombre;  //Nombre de la instalacion
     private String tipo;   //Tipo de instalación
     private int aforo;      //Aforo de la instalación
+    @Reference
+    private Hotel hotel; // Referencia al hotel de la instancia
 
     /**
      * Constructor
@@ -28,12 +27,14 @@ public class Instalacion {
      * @param nombre
      * @param tipo
      * @param aforo
+     * @param hotel
      */
-    public Instalacion(String id, String nombre, String tipo, int aforo) {
+    public Instalacion(String id, String nombre, String tipo, int aforo, Hotel hotel) {
         this.id = id;
         this.nombre = nombre;
         this.tipo = tipo;
         this.aforo = aforo;
+        this.hotel = hotel;
     }
 
     public String getId() {
@@ -68,6 +69,14 @@ public class Instalacion {
         this.aforo = aforo;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -75,8 +84,7 @@ public class Instalacion {
      */
     @Override
     public String toString() {
-        return "Instalacion{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", aforo=" + aforo + '}';
+        return "Instalacion{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", aforo=" + aforo + ", hotel=" + hotel.toString() + '}';
     }
-    
-    
+
 }
