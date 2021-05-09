@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -32,8 +33,8 @@ public class Login extends UI {
         WrappedSession sesion = getSession().getSession();
 
         //Formulario de inicio de sesion
-        TextField tfEmail = new TextField("Introduzca su correo para iniciar sesion");
-        TextField tfPass = new TextField("Introduzca su contraaseña para iniciar sesion");
+        TextField tfEmail = new TextField("Introduzca su correo para iniciar sesion:");
+        TextField tfPass = new TextField("Introduzca su contraaseña para iniciar sesion:");
         Button submit = new Button("Guardar");
 
         //Guardamos el formulario en el layout
@@ -58,6 +59,8 @@ public class Login extends UI {
                     UI.getCurrent().getPage().setLocation("./");
 
                     System.out.println("\n\nSESION ACTIVADA\n\n");
+                }else{
+                    Notification.show("Error de autentificación", "Credenciales no válidos", Notification.Type.ERROR_MESSAGE); 
                 }
             }
 
