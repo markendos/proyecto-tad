@@ -13,9 +13,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import upo.tad.g11.proyecto.tad.controller.ControladorPersonal;
 
 @Theme("mytheme")
@@ -32,9 +29,13 @@ public class Login extends UI {
         //Creamos la sesion
         WrappedSession sesion = getSession().getSession();
 
+        if (sesion.getAttribute("usuario") != null) {     //En caso de existir una sesión activa, redirigimos al menú
+            UI.getCurrent().getPage().setLocation("/hoteles");
+        }
+        
         //Formulario de inicio de sesion
         TextField tfEmail = new TextField("Introduzca su correo para iniciar sesion:");
-        TextField tfPass = new TextField("Introduzca su contraaseña para iniciar sesion:");
+        TextField tfPass = new TextField("Introduzca su contraseña para iniciar sesion:");
         Button submit = new Button("Guardar");
 
         //Guardamos el formulario en el layout
@@ -55,8 +56,8 @@ public class Login extends UI {
 
                     //Guardamos en la sesion el email del usuario
                     sesion.setAttribute("usuario", email);
-                    //Redireccionamos a la pagina MantenimientoDeEntidad
-                    UI.getCurrent().getPage().setLocation("./");
+                    //Redireccionamos a la pagina principal
+                    UI.getCurrent().getPage().setLocation("/hoteles");
 
                     System.out.println("\n\nSESION ACTIVADA\n\n");
                 }else{

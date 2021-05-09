@@ -1,9 +1,7 @@
 package upo.tad.g11.proyecto.tad.model.DAO;
 
-import com.mongodb.client.model.Filters;
-import static com.mongodb.client.model.Filters.eq;
+
 import dev.morphia.Datastore;
-import dev.morphia.query.Query;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Personal;
 
