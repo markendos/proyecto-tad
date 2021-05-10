@@ -72,7 +72,20 @@ public class Cliente implements Serializable {
         this.telefono = telefono;
         this.reservas = new ArrayList<Reserva>();
     }
-
+    /**
+     *
+     * @param name
+     * @param email
+     * @param telefono
+     */
+    public Cliente(String dni, String name, String email, String telefono) {
+        this.dni = dni;
+        this.name = name;
+        this.email = email;
+        this.telefono = telefono;
+        this.reservas = new ArrayList<Reserva>();
+    }
+    
     /*
     
     GETTERS Y SETTERS
