@@ -68,4 +68,8 @@ public class ControladorPersonal implements Controlador<Personal> {
         return personal.getAll();
     }
 
+    
+    public boolean Check(String email, String pass) {
+        return this.personal.check(email, pass);
+    }
 }
