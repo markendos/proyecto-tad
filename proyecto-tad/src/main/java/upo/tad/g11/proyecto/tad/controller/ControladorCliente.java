@@ -67,5 +67,10 @@ public class ControladorCliente implements Controlador<Cliente> {
         return clientes.getAll();
     }
 
+    @Override
+    public void addAll(List<Cliente> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
    
 }

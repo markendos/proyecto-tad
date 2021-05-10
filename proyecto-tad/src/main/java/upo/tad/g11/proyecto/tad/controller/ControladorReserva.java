@@ -64,4 +64,9 @@ public class ControladorReserva implements Controlador<Reserva> {
         return reservas.getAll();
     }
 
+    @Override
+    public void addAll(List<Reserva> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

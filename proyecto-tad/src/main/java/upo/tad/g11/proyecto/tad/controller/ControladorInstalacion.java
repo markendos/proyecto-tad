@@ -67,5 +67,10 @@ public class ControladorInstalacion implements Controlador<Instalacion> {
         return instalaciones.getAll();
     }
 
+    @Override
+    public void addAll(List<Instalacion> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
    
 }

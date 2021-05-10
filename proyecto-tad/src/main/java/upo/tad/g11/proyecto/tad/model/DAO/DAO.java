@@ -18,6 +18,8 @@ public interface DAO<T> {
     public List<T> getAll();
 
     public void save(T t);
+    
+    public void saveAll(List<T> t);
 
     public void delete(T t);
 }

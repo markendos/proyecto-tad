@@ -7,6 +7,8 @@ package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import java.util.Objects;
+import org.bson.types.ObjectId;
 
 /**
  * En esta clase se representa la estructura de un Hotel
@@ -16,7 +18,7 @@ import dev.morphia.annotations.Id;
 @Entity
 public class Hotel {
     @Id
-    private String id;      //Id para diferenciar los hoteles
+    private ObjectId id;      //Id para diferenciar los hoteles
     private String nombre;  //Nombre del hotel
     private String ubicacion;   //Ubicación del hotel
     private String calidad;     //Calidad del hotel
@@ -29,7 +31,7 @@ public class Hotel {
      * @param ubicacion
      * @param calidad
      */
-    public Hotel(String id, String nombre, String ubicacion, String calidad) {
+    public Hotel(ObjectId id, String nombre, String ubicacion, String calidad) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
@@ -40,11 +42,11 @@ public class Hotel {
         
     }
     
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -70,6 +72,27 @@ public class Hotel {
 
     public void setCalidad(String calidad) {
         this.calidad = calidad;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Hotel other = (Hotel) obj;
+        return Objects.equals(this.id, other.id);
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.List;
 public interface Controlador<T> {
 
     public void add(T t);
+    
+    public void addAll(List<T> t);
 
     public void update(T t);
 

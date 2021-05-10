@@ -7,6 +7,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
@@ -17,34 +18,29 @@ import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import java.util.Iterator;
 import org.bson.types.ObjectId;
 import upo.tad.g11.proyecto.tad.controller.ControladorHotel;
-import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
-import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
-import upo.tad.g11.proyecto.tad.view.form.HabitacionForm;
 import upo.tad.g11.proyecto.tad.view.form.HotelForm;
 
 @Theme("mytheme")
 @Title("Hoteles")
 public class GestionHoteles extends UI {
 
+    ControladorHotel controladorHotel = new ControladorHotel();
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
-        ControladorHotel cH = new ControladorHotel();
-        if (session.getAttribute("usuario") == null) {     //En caso de no existir una sesión activa, redirigimos al login
-            UI.getCurrent().getPage().setLocation("/");
-        }
 
+        /*if (session.getAttribute("usuario") == null) {     //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }*/
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -74,7 +70,17 @@ public class GestionHoteles extends UI {
         crearBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         form.addComponent(crearBtn);
 
-        vLayoutForm.addComponents(form);
+        // Boton para volver al menu
+        Button menuBtn = new Button("Menú");
+        menuBtn.addStyleName(ValoTheme.BUTTON_LINK);
+
+        // Al hacer click, se vuelve al menu principal
+        menuBtn.addClickListener(e
+                -> {
+            UI.getCurrent().getPage().setLocation("/menu");
+        }
+        );
+        vLayoutForm.addComponents(menuBtn, form);
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
 
@@ -85,7 +91,6 @@ public class GestionHoteles extends UI {
         // Contenedor para almacenar los beans de la entidad CRUD.
         BeanItemContainer<Hotel> beans
                 = new BeanItemContainer<>(Hotel.class);
-        
 
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
         Table table = new Table("Hoteles", beans);
@@ -98,11 +103,10 @@ public class GestionHoteles extends UI {
         table.setColumnReorderingAllowed(true);
         table.setSizeFull();
         table.setPageLength(table.size());
-        table.setColumnHeader("id", "ID del hotel");
         table.setColumnHeader("nombre", "Nombre");
         table.setColumnHeader("ubicacion", "Ubicación");
         table.setColumnHeader("calidad", "Calidad");
-        table.setVisibleColumns("id", "nombre", "ubicacion", "calidad");
+        table.setVisibleColumns("nombre", "ubicacion", "calidad");
 
         // Anyadimos los componentes de control para realizar las acciones de
         // editar y eliminar sobre los elementos de la tabla.
@@ -119,7 +123,12 @@ public class GestionHoteles extends UI {
 
         // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            beans.removeItem(table.getValue());
+            Object itemId = table.getValue();
+            BeanItem<Hotel> bean = beans.getItem(itemId);
+            Hotel h = bean.getBean();
+            controladorHotel.delete(h);
+            beans.removeAllItems();
+            beans.addAll(controladorHotel.listar());
             btnEliminar.setEnabled(false);
         });
 
@@ -128,6 +137,12 @@ public class GestionHoteles extends UI {
                 (Property.ValueChangeEvent event) -> {
                     Boolean checked = (Boolean) event.getProperty().getValue();
                     table.setEditable(checked);
+                    if (checked) {
+                        editable.setCaption("Guardar");
+                    } else {
+                        controladorHotel.addAll(beans.getItemIds());
+                        editable.setCaption("Editar");
+                    }
                 }
         );
 
@@ -135,13 +150,13 @@ public class GestionHoteles extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            String id = (String) binder.getField("id").getValue();
+            ObjectId id = new ObjectId();
             String nombre = (String) binder.getField("nombre").getValue();
             String ubicacion = (String) binder.getField("ubicacion").getValue();
             String calidad = (String) binder.getField("calidad").getValue();
-            
+
             Hotel h = new Hotel(id, nombre, ubicacion, calidad);
-            cH.add(h);
+            controladorHotel.add(h);
             beans.addBean(h);
         }
         );
@@ -162,13 +177,8 @@ public class GestionHoteles extends UI {
         // Anyadimos los componetes al layout de la tabla y se aplican los estilos.
         vLayoutTable.addComponents(cerrarSesionBtn, table, editable, btnEliminar);
         vLayoutTable.setSpacing(true);
-        
-        Iterator it = cH.listar().iterator();
-        while(it.hasNext()){
-            beans.addBean((Hotel) it.next());
-        }
-        
-        
+
+        beans.addAll(controladorHotel.listar());
 
         /*------------------(END)TABLA (read, update, delete)------------------*/
         // Anyadimos los componentes que contienen los layouts del formulario y
@@ -180,7 +190,6 @@ public class GestionHoteles extends UI {
 
         setContent(layout);
     }
-    
 
     @WebServlet(value = {"/hoteles/*"}, name = "GestionHoteles", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = false, ui = GestionHoteles.class)

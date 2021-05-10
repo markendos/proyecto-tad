@@ -8,7 +8,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 public class ControladorHabitacion implements Controlador<Habitacion> {
     
     //Definicion de los atributos
-    private DAO<Habitacion> habitaciones = new HabitacionDAO();
+    private DAO<Habitacion> repository = new HabitacionDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
@@ -17,8 +17,8 @@ public class ControladorHabitacion implements Controlador<Habitacion> {
      */
     
     public void add(Habitacion t) {
-        if (habitaciones.get(t.getId()) == null) {
-            this.habitaciones.save(t);
+        if (repository.get(t.getId()) == null) {
+            this.repository.save(t);
         }
     }
 
@@ -28,7 +28,7 @@ public class ControladorHabitacion implements Controlador<Habitacion> {
      *
      */
     public void update(Habitacion t) {
-        this.habitaciones.save(t);
+        this.repository.save(t);
 
     }
 
@@ -38,7 +38,7 @@ public class ControladorHabitacion implements Controlador<Habitacion> {
      */
     public void delete(Habitacion t) {
         
-        this.habitaciones.delete(t);
+        this.repository.delete(t);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ControladorHabitacion implements Controlador<Habitacion> {
      *
      */
     public Habitacion get(Habitacion t) {
-        Habitacion c = habitaciones.get(t.getId());
+        Habitacion c = repository.get(t.getId());
         return c;
     }
 
@@ -57,7 +57,12 @@ public class ControladorHabitacion implements Controlador<Habitacion> {
      */
     @Override
     public List listar() {
-        return habitaciones.getAll();
+        return repository.getAll();
+    }
+
+    @Override
+    public void addAll(List<Habitacion> t) {
+        repository.saveAll(t);
     }
 
 }

@@ -7,10 +7,10 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
@@ -22,12 +22,16 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bson.types.ObjectId;
+import upo.tad.g11.proyecto.tad.controller.Controlador;
+import upo.tad.g11.proyecto.tad.controller.ControladorTipoHabitacion;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 import upo.tad.g11.proyecto.tad.view.form.TiposHabitacionForm;
 
 @Theme("mytheme")
-@Title("Hoteles")
+@Title("Tipos Habitacion")
 public class GestionTiposHabitacion extends UI {
+
+    Controlador controladorTH = new ControladorTipoHabitacion();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -49,7 +53,7 @@ public class GestionTiposHabitacion extends UI {
         item.addItemProperty("nombre", new ObjectProperty("", String.class));
         item.addItemProperty("metros", new ObjectProperty("0", String.class));
         item.addItemProperty("terraza", new ObjectProperty(false, Boolean.class));
-        item.addItemProperty("tipo", new ObjectProperty("", String.class));
+        item.addItemProperty("precio", new ObjectProperty("0", String.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
         TiposHabitacionForm form = new TiposHabitacionForm();
@@ -63,11 +67,23 @@ public class GestionTiposHabitacion extends UI {
         crearBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         form.addComponent(crearBtn);
 
+        // Boton para volver al menu
+        Button menuBtn = new Button("Menú");
+        menuBtn.addStyleName(ValoTheme.BUTTON_LINK);
+
+        // Al hacer click, se vuelve al menu principal
+        menuBtn.addClickListener(e
+                -> {
+            UI.getCurrent().getPage().setLocation("/menu");
+        }
+        );
+        vLayoutForm.addComponents(menuBtn, form);
+
         vLayoutForm.addComponents(form);
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
 
- /*--------------------TABLA (read, update, delete)--------------------*/
+        /*--------------------TABLA (read, update, delete)--------------------*/
         // Layout que servira de contenedor para la tabla de la entidad.
         VerticalLayout vLayoutTable = new VerticalLayout();
 
@@ -101,13 +117,20 @@ public class GestionTiposHabitacion extends UI {
 
         //Lsteners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
-        table.addListener((ItemClickEvent.ItemClickListener) (ItemClickEvent event) -> {
-            btnEliminar.setEnabled(true);
-        });
+        table.addValueChangeListener(
+                (Property.ValueChangeEvent event) -> {
+                    btnEliminar.setEnabled(true);
+                }
+        );
 
         // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            beans.removeItem(table.getValue());
+            Object itemId = table.getValue();
+            BeanItem<TipoHabitacion> bean = beans.getItem(itemId);
+            TipoHabitacion th = bean.getBean();
+            controladorTH.delete(th);
+            beans.removeAllItems();
+            beans.addAll(controladorTH.listar());
             btnEliminar.setEnabled(false);
         });
 
@@ -116,6 +139,12 @@ public class GestionTiposHabitacion extends UI {
                 (Property.ValueChangeEvent event) -> {
                     Boolean checked = (Boolean) event.getProperty().getValue();
                     table.setEditable(checked);
+                    if (checked) {
+                        editable.setCaption("Guardar");
+                    } else {
+                        controladorTH.addAll(beans.getItemIds());
+                        editable.setCaption("Editar");
+                    }
                 }
         );
 
@@ -128,9 +157,10 @@ public class GestionTiposHabitacion extends UI {
             Float metros = Float.parseFloat((String) binder.getField("metros").getValue());
             Boolean terraza = (Boolean) binder.getField("terraza").getValue();
             Float precio = Float.parseFloat((String) binder.getField("precio").getValue());
-            
+
             TipoHabitacion th = new TipoHabitacion(id, nombre, metros, terraza, precio);
             beans.addBean(th);
+            controladorTH.add(th);
         }
         );
 
@@ -143,7 +173,7 @@ public class GestionTiposHabitacion extends UI {
         cerrarSesionBtn.addClickListener(e
                 -> {
             session.invalidate();
-            UI.getCurrent().getPage().setLocation("./");
+            UI.getCurrent().getPage().setLocation("/");
         }
         );
 
@@ -160,6 +190,8 @@ public class GestionTiposHabitacion extends UI {
         layout.setSizeFull();
 
         setContent(layout);
+
+        beans.addAll(controladorTH.listar());
     }
 
     @WebServlet(value = {"/tiposHabitacion/*"}, name = "GestionTiposHabitacion", asyncSupported = true)

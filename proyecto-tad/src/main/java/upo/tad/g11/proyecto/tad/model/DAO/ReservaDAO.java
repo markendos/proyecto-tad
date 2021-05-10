@@ -68,4 +68,9 @@ public class ReservaDAO implements DAO<Reserva> {
         d.delete(t);
     }
 
+    @Override
+    public void saveAll(List<Reserva> t) {
+        d.save(t);
+    }
+
 }

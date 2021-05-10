@@ -67,4 +67,9 @@ public class ClienteDAO implements DAO<Cliente> {
     public void delete(Cliente t) {
         d.delete(t);
     }
+
+    @Override
+    public void saveAll(List<Cliente> t) {
+        d.save(t);
+    }
 }

@@ -1,7 +1,6 @@
 package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
-import upo.tad.g11.proyecto.tad.model.DAO.DAO;
 import upo.tad.g11.proyecto.tad.model.DAO.PersonalDAO;
 import upo.tad.g11.proyecto.tad.model.entity.Personal;
 
@@ -62,5 +61,10 @@ public class ControladorPersonal implements Controlador<Personal> {
     
     public boolean check(String email, String pass) {
         return this.personal.check(email, pass);
+    }
+
+    @Override
+    public void addAll(List<Personal> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

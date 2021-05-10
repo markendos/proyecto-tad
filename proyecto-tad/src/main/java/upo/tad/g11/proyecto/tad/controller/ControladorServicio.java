@@ -64,4 +64,9 @@ public class ControladorServicio implements Controlador<Servicio> {
     public List listar() {
         return servicios.getAll();
     }
+
+    @Override
+    public void addAll(List<Servicio> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

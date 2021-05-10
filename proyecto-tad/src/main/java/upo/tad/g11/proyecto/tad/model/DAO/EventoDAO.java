@@ -67,4 +67,9 @@ public class EventoDAO implements DAO<Evento> {
     public void delete(Evento t) {
         d.delete(t);
     }
+
+    @Override
+    public void saveAll(List<Evento> t) {
+        d.save(t);
+    }
 }

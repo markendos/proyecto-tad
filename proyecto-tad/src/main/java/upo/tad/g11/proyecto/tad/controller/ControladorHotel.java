@@ -58,4 +58,9 @@ public class ControladorHotel implements Controlador<Hotel> {
     public List<Hotel> listar() {
         return hoteles.getAll();
     }
+
+    @Override
+    public void addAll(List<Hotel> t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

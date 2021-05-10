@@ -87,4 +87,9 @@ public class PersonalDAO implements DAO<Personal> {
 
         return personal != null;
     }
+
+    @Override
+    public void saveAll(List<Personal> t) {
+        d.save(t);
+    }
 }

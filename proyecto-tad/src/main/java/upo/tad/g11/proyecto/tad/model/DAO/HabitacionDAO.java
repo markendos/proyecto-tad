@@ -67,4 +67,9 @@ public class HabitacionDAO implements DAO<Habitacion> {
     public void delete(Habitacion t) {
         d.delete(t);
     }
+
+    @Override
+    public void saveAll(List<Habitacion> t) {
+        d.save(t);
+    }
 }

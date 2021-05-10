@@ -8,7 +8,7 @@ import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
 
     //Definicion de los atributos
-    private DAO<TipoHabitacion> tipos = new TipoHabitacionDAO();
+    private DAO<TipoHabitacion> repository = new TipoHabitacionDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
@@ -16,8 +16,8 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      *
      */
     public void add(TipoHabitacion t) {
-        if (tipos.get(t.getId()) == null) {
-            this.tipos.save(t);
+        if (repository.get(t.getId()) == null) {
+            this.repository.save(t);
         }
     }
 
@@ -27,7 +27,7 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      *
      */
     public void update(TipoHabitacion t) {
-        this.tipos.save(t);
+        this.repository.save(t);
 
     }
 
@@ -37,7 +37,7 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      */
     public void delete(TipoHabitacion t) {
 
-        this.tipos.delete(t);
+        this.repository.delete(t);
     }
 
     /**
@@ -45,7 +45,7 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      *
      */
     public TipoHabitacion get(TipoHabitacion t) {
-        TipoHabitacion c = tipos.get(t.getId());
+        TipoHabitacion c = repository.get(t.getId());
         return c;
     }
 
@@ -56,6 +56,11 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      */
     @Override
     public List<TipoHabitacion> listar() {
-        return tipos.getAll();
+        return repository.getAll();
+    }
+
+    @Override
+    public void addAll(List<TipoHabitacion> t) {
+        this.repository.saveAll(t);
     }
 }

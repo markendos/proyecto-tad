@@ -70,4 +70,9 @@ public class HotelDAO implements DAO<Hotel> {
     public void delete(Hotel t) {
         d.delete(t);
     }
+
+    @Override
+    public void saveAll(List<Hotel> t) {
+        d.save(t);
+    }
 }

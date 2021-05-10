@@ -7,6 +7,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
@@ -22,18 +23,18 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bson.types.ObjectId;
+import upo.tad.g11.proyecto.tad.controller.Controlador;
+import upo.tad.g11.proyecto.tad.controller.ControladorHabitacion;
 import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 import upo.tad.g11.proyecto.tad.view.form.HabitacionForm;
 
-/**
- *
- * @author Alvaro
- */
 @Theme("mytheme")
-@Title("Hoteles")
+@Title("Habitaciones")
 public class GestionHabitaciones extends UI {
+
+    Controlador controladorH = new ControladorHabitacion();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -69,7 +70,17 @@ public class GestionHabitaciones extends UI {
         crearBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         form.addComponent(crearBtn);
 
-        vLayoutForm.addComponents(form);
+        // Boton para volver al menu
+        Button menuBtn = new Button("Menú");
+        menuBtn.addStyleName(ValoTheme.BUTTON_LINK);
+
+        // Al hacer click, se vuelve al menu principal
+        menuBtn.addClickListener(e
+                -> {
+            UI.getCurrent().getPage().setLocation("/menu");
+        }
+        );
+        vLayoutForm.addComponents(menuBtn, form);
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
 
@@ -80,7 +91,7 @@ public class GestionHabitaciones extends UI {
         // Contenedor para almacenar los beans de la entidad CRUD.
         BeanItemContainer<Habitacion> beans
                 = new BeanItemContainer<>(Habitacion.class);
-        
+
         beans.addNestedContainerProperty("hotel.nombre");
         beans.addNestedContainerProperty("tipo.nombre");
 
@@ -97,9 +108,9 @@ public class GestionHabitaciones extends UI {
         table.setPageLength(table.size());
         table.setColumnHeader("numero", "Nº de habitación");
         table.setColumnHeader("fumador", "¿Fumador?");
-        table.setColumnHeader("hotel", "Hotel");
-        table.setColumnHeader("tipo", "Tipo");
-        table.setVisibleColumns("numero", "fumador", "hotel", "tipo");
+        table.setColumnHeader("hotel.nombre", "Hotel");
+        table.setColumnHeader("tipo.nombre", "Tipo");
+        table.setVisibleColumns("numero", "fumador", "hotel.nombre", "tipo.nombre");
 
         // Anyadimos los componentes de control para realizar las acciones de
         // editar y eliminar sobre los elementos de la tabla.
@@ -116,7 +127,12 @@ public class GestionHabitaciones extends UI {
 
         // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            beans.removeItem(table.getValue());
+            Object itemId = table.getValue();
+            BeanItem<Habitacion> bean = beans.getItem(itemId);
+            Habitacion h = bean.getBean();
+            controladorH.delete(h);
+            beans.removeAllItems();
+            beans.addAll(controladorH.listar());
             btnEliminar.setEnabled(false);
         });
 
@@ -125,6 +141,12 @@ public class GestionHabitaciones extends UI {
                 (Property.ValueChangeEvent event) -> {
                     Boolean checked = (Boolean) event.getProperty().getValue();
                     table.setEditable(checked);
+                    if (checked) {
+                        editable.setCaption("Guardar");
+                    } else {
+                        controladorH.addAll(beans.getItemIds());
+                        editable.setCaption("Editar");
+                    }
                 }
         );
 
@@ -152,7 +174,7 @@ public class GestionHabitaciones extends UI {
         cerrarSesionBtn.addClickListener(e
                 -> {
             session.invalidate();
-            UI.getCurrent().getPage().setLocation("./");
+            UI.getCurrent().getPage().setLocation("/");
         }
         );
 

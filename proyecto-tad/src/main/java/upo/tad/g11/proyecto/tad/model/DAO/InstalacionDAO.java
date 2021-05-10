@@ -4,10 +4,6 @@ import dev.morphia.Datastore;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Instalacion;
 
-/**
- *
- * @author Alvaro
- */
 public class InstalacionDAO implements DAO<Instalacion> {
     //Definicion de los atributos
     //Conexion con la BD y Coleccion de la BD
@@ -69,5 +65,10 @@ public class InstalacionDAO implements DAO<Instalacion> {
     @Override
     public void delete(Instalacion t) {
         d.delete(t);
+    }
+
+    @Override
+    public void saveAll(List<Instalacion> t) {
+        d.save(t);
     }
 }
