@@ -4,12 +4,6 @@ import dev.morphia.Datastore;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 
-/**
- * Este DAO se encarga de aplicar las operaciones de los reservas
- *
- *
- * @author Amalio
- */
 public class ReservaDAO implements DAO<Reserva> {
 
     //Definicion de los atributos

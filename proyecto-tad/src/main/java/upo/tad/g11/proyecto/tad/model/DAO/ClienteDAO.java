@@ -67,5 +67,4 @@ public class ClienteDAO implements DAO<Cliente> {
     public void delete(Cliente t) {
         d.delete(t);
     }
-
 }
