@@ -53,6 +53,8 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-server</artifactId>
+            <version>7.7.7</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -75,6 +77,11 @@
             <groupId>dev.morphia.morphia</groupId>
             <artifactId>core</artifactId>
             <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.2.1</version>
         </dependency>
     </dependencies>
 
