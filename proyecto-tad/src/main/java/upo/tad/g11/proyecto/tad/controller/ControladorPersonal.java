@@ -8,7 +8,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Personal;
 public class ControladorPersonal implements Controlador<Personal> {
 
     //Definicion de los atributos
-    private DAO<Personal> personal = new PersonalDAO();
+    private PersonalDAO personal = new PersonalDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
@@ -60,7 +60,7 @@ public class ControladorPersonal implements Controlador<Personal> {
     }
 
     
-    public boolean Check(String email, String pass) {
+    public boolean check(String email, String pass) {
         return this.personal.check(email, pass);
     }
 }
