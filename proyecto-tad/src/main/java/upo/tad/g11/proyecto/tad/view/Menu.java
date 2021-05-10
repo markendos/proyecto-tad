@@ -35,6 +35,7 @@ public class Menu extends UI {
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/hoteles" + "'><h2>Gestión de Hoteles</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/habitaciones" + "'><h2>Gestión de Habitaciones</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/tiposHabitacion" + "'><h2>Gestión de Tipos de Habitación</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/clientes" + "'><h2>Gestión de Clientes</h2></a></li>";
         content += "</ul>";
 
         Label label = new Label(content, ContentMode.HTML);

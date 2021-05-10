@@ -12,7 +12,6 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.SelectionEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
@@ -24,7 +23,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.Date;
-import org.bson.types.ObjectId;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
@@ -36,7 +34,7 @@ import upo.tad.g11.proyecto.tad.view.form.ReservaForm;
  * @author Grupo XI
  */
 @Theme("mytheme")
-@Title("Hoteles")
+@Title("Clientes")
 public class GestionClientes extends UI {
 
     @Override
@@ -61,13 +59,12 @@ public class GestionClientes extends UI {
         itemCliente.addItemProperty("email", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("telefono", new ObjectProperty("", String.class));
 
-        
         PropertysetItem itemReserva = new PropertysetItem();
         itemReserva.addItemProperty("fechaLlegada", new ObjectProperty(null, Date.class));
         itemReserva.addItemProperty("fechaSalida", new ObjectProperty(null, Date.class));
         itemReserva.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
         itemReserva.addItemProperty("tipo", new ObjectProperty(null, TipoHabitacion.class));
-        
+
         // Instanciamos un nuevo componente que contendra los campos del formulario
         ClienteForm formCliente = new ClienteForm();
         ReservaForm formReserva = new ReservaForm();
@@ -75,16 +72,27 @@ public class GestionClientes extends UI {
         // Realizamos el binding del formulario entre la UI y el modelo asociado.
         FieldGroup binderCliente = new FieldGroup(itemCliente);
         binderCliente.bindMemberFields(formCliente);
-        
+
         FieldGroup binderReserva = new FieldGroup(itemReserva);
         binderReserva.bindMemberFields(formReserva);
-        
+
         // Creamos un boton para enviar el formulario y lo anyadimos a este
         Button crearBtn = new Button("Crear");
         crearBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         formCliente.addComponent(crearBtn);
 
-        vLayoutForm.addComponents(formCliente);
+        // Boton para volver al menu
+        Button menuBtn = new Button("Menú");
+        menuBtn.addStyleName(ValoTheme.BUTTON_LINK);
+
+        // Al hacer click, se vuelve al menu principal
+        menuBtn.addClickListener(e
+                -> {
+            UI.getCurrent().getPage().setLocation("/menu");
+        }
+        );
+
+        vLayoutForm.addComponents(menuBtn, formCliente);
         vLayoutForm.addComponents(formReserva);
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
@@ -195,7 +203,7 @@ public class GestionClientes extends UI {
         cerrarSesionBtn.addClickListener(e
                 -> {
             session.invalidate();
-            UI.getCurrent().getPage().setLocation("./login");
+            UI.getCurrent().getPage().setLocation("/");
         }
         );
 
