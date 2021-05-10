@@ -22,18 +22,12 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bson.types.ObjectId;
-import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
-import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
-import upo.tad.g11.proyecto.tad.view.form.HabitacionForm;
+import upo.tad.g11.proyecto.tad.view.form.TiposHabitacionForm;
 
-/**
- *
- * @author Alvaro
- */
 @Theme("mytheme")
 @Title("Hoteles")
-public class GestionHabitaciones extends UI {
+public class GestionTiposHabitacion extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -52,13 +46,13 @@ public class GestionHabitaciones extends UI {
         ** por defecto de los campos y el tipo de dato que se espera recibir.
          */
         PropertysetItem item = new PropertysetItem();
-        item.addItemProperty("numero", new ObjectProperty("", String.class));
-        item.addItemProperty("fumador", new ObjectProperty(false, Boolean.class));
-        item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
-        item.addItemProperty("tipo", new ObjectProperty(null, TipoHabitacion.class));
+        item.addItemProperty("nombre", new ObjectProperty("", String.class));
+        item.addItemProperty("metros", new ObjectProperty("0", String.class));
+        item.addItemProperty("terraza", new ObjectProperty(false, Boolean.class));
+        item.addItemProperty("tipo", new ObjectProperty("", String.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
-        HabitacionForm form = new HabitacionForm();
+        TiposHabitacionForm form = new TiposHabitacionForm();
 
         // Realizamos el binding del formulario entre la UI y el modelo asociado.
         FieldGroup binder = new FieldGroup(item);
@@ -73,19 +67,16 @@ public class GestionHabitaciones extends UI {
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
 
-        /*--------------------TABLA (read, update, delete)--------------------*/
+ /*--------------------TABLA (read, update, delete)--------------------*/
         // Layout que servira de contenedor para la tabla de la entidad.
         VerticalLayout vLayoutTable = new VerticalLayout();
 
         // Contenedor para almacenar los beans de la entidad CRUD.
-        BeanItemContainer<Habitacion> beans
-                = new BeanItemContainer<>(Habitacion.class);
-        
-        beans.addNestedContainerProperty("hotel.nombre");
-        beans.addNestedContainerProperty("tipo.nombre");
+        BeanItemContainer<TipoHabitacion> beans
+                = new BeanItemContainer<>(TipoHabitacion.class);
 
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
-        Table table = new Table("Habitaciones", beans);
+        Table table = new Table("Tipos de Habitación", beans);
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
@@ -95,11 +86,11 @@ public class GestionHabitaciones extends UI {
         table.setColumnReorderingAllowed(true);
         table.setSizeFull();
         table.setPageLength(table.size());
-        table.setColumnHeader("numero", "Nº de habitación");
-        table.setColumnHeader("fumador", "¿Fumador?");
-        table.setColumnHeader("hotel", "Hotel");
-        table.setColumnHeader("tipo", "Tipo");
-        table.setVisibleColumns("numero", "fumador", "hotel", "tipo");
+        table.setColumnHeader("nombre", "Nombre");
+        table.setColumnHeader("metros", "Nº Metros");
+        table.setColumnHeader("terraza", "¿Terraza?");
+        table.setColumnHeader("precio", "Precio/noche");
+        table.setVisibleColumns("nombre", "metros", "terraza", "precio");
 
         // Anyadimos los componentes de control para realizar las acciones de
         // editar y eliminar sobre los elementos de la tabla.
@@ -133,13 +124,13 @@ public class GestionHabitaciones extends UI {
         crearBtn.addClickListener(e
                 -> {
             ObjectId id = new ObjectId();
-            Integer numero = Integer.parseInt((String) binder.getField("numero").getValue());
-            Boolean fumador = (Boolean) binder.getField("fumador").getValue();
-            TipoHabitacion tipo = (TipoHabitacion) binder.getField("tipo").getValue();
-            Hotel hotel = (Hotel) binder.getField("hotel").getValue();
-
-            Habitacion h = new Habitacion(id, numero, fumador, tipo, hotel);
-            beans.addBean(h);
+            String nombre = (String) binder.getField("nombre").getValue();
+            Float metros = Float.parseFloat((String) binder.getField("metros").getValue());
+            Boolean terraza = (Boolean) binder.getField("terraza").getValue();
+            Float precio = Float.parseFloat((String) binder.getField("precio").getValue());
+            
+            TipoHabitacion th = new TipoHabitacion(id, nombre, metros, terraza, precio);
+            beans.addBean(th);
         }
         );
 
@@ -171,8 +162,8 @@ public class GestionHabitaciones extends UI {
         setContent(layout);
     }
 
-    @WebServlet(value = {"/habitaciones/*"}, name = "GestionHabitaciones", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = GestionHabitaciones.class)
-    public static class GestionHabitacionesServlet extends VaadinServlet {
+    @WebServlet(value = {"/tiposHabitacion/*"}, name = "GestionTiposHabitacion", asyncSupported = true)
+    @VaadinServletConfiguration(productionMode = false, ui = GestionTiposHabitacion.class)
+    public static class GestionTiposHabitacionServlet extends VaadinServlet {
     }
 }
