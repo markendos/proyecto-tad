@@ -2,6 +2,7 @@ package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.ClienteDAO;
+import upo.tad.g11.proyecto.tad.model.DAO.DAO;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
 
 
@@ -14,7 +15,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Cliente;
 public class ControladorCliente implements Controlador<Cliente> {
 
     //Definicion de los atributos
-    private ClienteDAO clientes = new ClienteDAO();
+    private DAO<Cliente> clientes = new ClienteDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
@@ -56,15 +57,15 @@ public class ControladorCliente implements Controlador<Cliente> {
         return c;
     }
 
+    /**
+     * Metodo que pide al DAO todos los objetos DTO para mostrarselos al usuario
+     * como lista
+     *
+     */
     @Override
     public List listar() {
         return clientes.getAll();
     }
 
-    /**
-     * Metodo que pide al DAO todos los objetos DTO para mostrarselos al usuario
-     * como cadena
-     *
-     */
    
 }

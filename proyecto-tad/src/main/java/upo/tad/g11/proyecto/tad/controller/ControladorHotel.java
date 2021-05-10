@@ -1,6 +1,7 @@
 package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
+import upo.tad.g11.proyecto.tad.model.DAO.DAO;
 import upo.tad.g11.proyecto.tad.model.DAO.HotelDAO;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 
@@ -8,38 +9,58 @@ import upo.tad.g11.proyecto.tad.model.entity.Hotel;
  *
  * @author Alvaro
  */
-public class ControladorHotel implements Controlador {
-    
-    HotelDAO hotelDAO = new HotelDAO();
+public class ControladorHotel implements Controlador<Hotel> {
 
-    @Override
-    public void add(String[] args) {
-        Hotel h = new Hotel(args[0], args[1], args[2], args[3]);
-        hotelDAO.save(h);
-    }
+    //Definicion de los atributos
+    DAO<Hotel> hoteles = new HotelDAO();
 
-    @Override
-    public void update(int id, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
+     * en la BD
+     *
+     */
+    public void add(Hotel t) {
+        if (hoteles.get(t.getId()) == null) {
+            this.hoteles.save(t);
+        }
     }
 
-    @Override
-    public Object get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Metodo que formatea los datos y prepara un nuevo objeto que sera
+     * actualizado en la BD
+     *
+     */
+    public void update(Hotel t) {
+        this.hoteles.save(t);
+
     }
 
+    /**
+     * Metodo que recibe un id y lo elimina de la BD
+     *
+     */
+    public void delete(Hotel t) {
+
+        this.hoteles.delete(t);
+    }
+
+    /**
+     * Metodo que pide un id al DAO y lo devuelve a la pantalla principal
+     *
+     */
+    public Hotel get(Hotel t) {
+        Hotel c = hoteles.get(t.getId());
+        return c;
+    }
+
+    /**
+     * Metodo que pide al DAO todos los objetos DTO para mostrarselos al usuario
+     * como lista
+     *
+     */
     @Override
-    public String listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List listar() {
+        return hoteles.getAll();
     }
-    
-    public List<Hotel> getListado(){
-        return hotelDAO.getAll();
-    }
-    
+
 }

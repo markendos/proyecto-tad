@@ -54,7 +54,12 @@ public class ControladorServicio implements Controlador<Servicio> {
         Servicio r = servicios.get(t.getId());
         return r;
     }
-
+    
+    /**
+     * Metodo que pide al DAO todos los objetos DTO para mostrarselos al usuario
+     * como lista
+     *
+     */
     @Override
     public List listar() {
         return servicios.getAll();
