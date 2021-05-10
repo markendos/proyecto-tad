@@ -54,7 +54,8 @@ public class GestionHoteles extends UI {
         crearHotel.addClickListener(e -> {    //Evento para cerrar la sesión y volver al login
             
             String[] params = {tfID.getValue(), tfNombre.getValue(), tfUbicacion.getValue(), tfCalidad.getValue()};
-            cHotel.add(params);
+            
+            cHotel.add(new Hotel(params[0], params[1], params[2], params[3]));
         });
 
         cerrarSesion.addClickListener(e -> {    //Evento para cerrar la sesión y volver al login
@@ -73,7 +74,7 @@ public class GestionHoteles extends UI {
         layout.addComponent(tablaHoteles);
         
         //Mostramos en la tabla los hoteles ya creados
-        Iterator it = cHotel.getListado().iterator();
+        Iterator it = cHotel.listar().iterator();
         while (it.hasNext()) {  //Iteramos dobre la lista de hoteles
             Hotel h = (Hotel) it.next();
 

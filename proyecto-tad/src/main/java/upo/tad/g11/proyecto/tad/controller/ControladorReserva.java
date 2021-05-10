@@ -4,7 +4,6 @@ import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.ReservaDAO;
 import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 
-
 /**
  * Este controlador se encarga de gestionar las operaciones de las reservas
  *
@@ -21,7 +20,6 @@ public class ControladorReserva implements Controlador<Reserva> {
      * en la BD
      *
      */
-    
     public void add(Reserva t) {
         if (reservas.get(t.getId()) == null) {
             this.reservas.save(t);
@@ -43,7 +41,7 @@ public class ControladorReserva implements Controlador<Reserva> {
      *
      */
     public void delete(Reserva t) {
-        
+
         this.reservas.delete(t);
     }
 
@@ -56,10 +54,14 @@ public class ControladorReserva implements Controlador<Reserva> {
         return r;
     }
 
+    /**
+     * Metodo que pide al DAO todos los objetos DTO para mostrarselos al usuario
+     * como lista
+     *
+     */
     @Override
     public List listar() {
         return reservas.getAll();
     }
 
-    
 }
