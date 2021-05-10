@@ -3,19 +3,21 @@
  */
 package upo.tad.g11.proyecto.tad.controller;
 
+import java.util.List;
+
 /**
  *
  * @author Amalio
  */
 interface Controlador<T> {
 
-    public void add(String args[]);
+    public void add(T t);
 
-    public void update(int id, String args[]);
+    public void update(T t);
 
-    public void delete(int id);
+    public void delete(T t);
 
-    public T get(int id);
+    public T get(T t);
 
-    public String listar();
+    public List<T> listar();
 }
