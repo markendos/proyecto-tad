@@ -52,7 +52,7 @@ public class Login extends UI {
                 String pass = tfPass.getValue();
 
                 ControladorPersonal cp = new ControladorPersonal();
-                if (cp.Check(email, pass)) {
+                if (cp.check(email, pass)) {
 
                     //Guardamos en la sesion el email del usuario
                     sesion.setAttribute("usuario", email);
