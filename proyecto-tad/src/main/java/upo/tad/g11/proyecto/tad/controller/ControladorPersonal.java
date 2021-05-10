@@ -1,46 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package upo.tad.g11.proyecto.tad.controller;
 
-import upo.tad.g11.proyecto.tad.model.DAO.PersonalDAO;
+import java.util.List;
+import upo.tad.g11.proyecto.tad.model.entity.Personal;
 
-/**
- *
- * @author Amalio
- */
-public class ControladorPersonal implements Controlador {
-
-    PersonalDAO personal = new PersonalDAO();
+public class ControladorPersonal implements Controlador<Personal> {
 
     @Override
-    public void add(String[] args) {
+    public void add(Personal t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update(int id, String[] args) {
+    public void update(Personal t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Personal t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object get(int id) {
+    public Personal get(Personal t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String listar() {
+    public List<Personal> listar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public boolean Check(String email, String pass) {
-        return this.personal.check(email, pass);
     }
 }

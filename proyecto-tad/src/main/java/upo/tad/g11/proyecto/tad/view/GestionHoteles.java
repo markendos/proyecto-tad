@@ -5,7 +5,6 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Item;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
@@ -19,10 +18,6 @@ import java.util.Iterator;
 import upo.tad.g11.proyecto.tad.controller.ControladorHotel;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 
-/**
- *
- * @author Alvaro
- */
 @Theme("mytheme")
 @Title("Hoteles")
 public class GestionHoteles extends UI {

@@ -2,7 +2,6 @@ package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.ReservaDAO;
-import upo.tad.g11.proyecto.tad.model.entity.Cliente;
 import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 
 

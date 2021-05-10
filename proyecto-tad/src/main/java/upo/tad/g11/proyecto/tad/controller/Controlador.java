@@ -5,11 +5,7 @@ package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
 
-/**
- *
- * @author Amalio
- */
-interface Controlador<T> {
+public interface Controlador<T> {
 
     public void add(T t);
 
