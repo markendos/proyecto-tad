@@ -12,7 +12,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 public class ControladorHotel implements Controlador<Hotel> {
 
     //Definicion de los atributos
-    DAO<Hotel> hoteles = new HotelDAO();
+    private DAO<Hotel> hoteles = new HotelDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
