@@ -37,6 +37,10 @@ public class Instalacion {
         this.hotel = hotel;
     }
 
+    public Instalacion(){
+        
+    }
+    
     public String getId() {
         return id;
     }

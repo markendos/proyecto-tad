@@ -41,6 +41,10 @@ public class Cliente implements Serializable {
         this.reservas = reservas;
     }
 
+    public Cliente(){
+        
+    }
+    
     /**
      *
      * @param name

@@ -36,6 +36,10 @@ public class Hotel {
         this.calidad = calidad;
     }
 
+    public Hotel(){
+        
+    }
+    
     public String getId() {
         return id;
     }

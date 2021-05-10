@@ -60,6 +60,10 @@ public class Reserva implements Serializable {
         this.habitacion = habitacion;
     }
 
+    public Reserva(){
+        
+    }
+    
     /*
     
     GETTERS Y SETTERS
