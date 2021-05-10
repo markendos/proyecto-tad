@@ -2,22 +2,23 @@ package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.DAO;
-import upo.tad.g11.proyecto.tad.model.DAO.TipoHabitacionDAO;
-import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
+import upo.tad.g11.proyecto.tad.model.DAO.HabitacionDAO;
+import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 
-public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
-
+public class ControladorHabitacion implements Controlador<Habitacion> {
+    
     //Definicion de los atributos
-    private DAO<TipoHabitacion> tipos = new TipoHabitacionDAO();
+    private DAO<Habitacion> habitaciones = new HabitacionDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
      * en la BD
      *
      */
-    public void add(TipoHabitacion t) {
-        if (tipos.get(t.getId()) == null) {
-            this.tipos.save(t);
+    
+    public void add(Habitacion t) {
+        if (habitaciones.get(t.getId()) == null) {
+            this.habitaciones.save(t);
         }
     }
 
@@ -26,8 +27,8 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      * actualizado en la BD
      *
      */
-    public void update(TipoHabitacion t) {
-        this.tipos.save(t);
+    public void update(Habitacion t) {
+        this.habitaciones.save(t);
 
     }
 
@@ -35,17 +36,17 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      * Metodo que recibe un id y lo elimina de la BD
      *
      */
-    public void delete(TipoHabitacion t) {
-
-        this.tipos.delete(t);
+    public void delete(Habitacion t) {
+        
+        this.habitaciones.delete(t);
     }
 
     /**
      * Metodo que pide un id al DAO y lo devuelve a la pantalla principal
      *
      */
-    public TipoHabitacion get(TipoHabitacion t) {
-        TipoHabitacion c = tipos.get(t.getId());
+    public Habitacion get(Habitacion t) {
+        Habitacion c = habitaciones.get(t.getId());
         return c;
     }
 
@@ -55,7 +56,8 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      *
      */
     @Override
-    public List<TipoHabitacion> listar() {
-        return tipos.getAll();
+    public List listar() {
+        return habitaciones.getAll();
     }
+
 }

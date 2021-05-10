@@ -1,23 +1,31 @@
 package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
+import upo.tad.g11.proyecto.tad.model.DAO.EventoDAO;
 import upo.tad.g11.proyecto.tad.model.DAO.DAO;
-import upo.tad.g11.proyecto.tad.model.DAO.TipoHabitacionDAO;
-import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
+import upo.tad.g11.proyecto.tad.model.entity.Evento;
 
-public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
+
+/**
+ * Este controlador se encarga de gestionar las operaciones de los eventos
+ *
+ *
+ * @author Amalio
+ */
+public class ControladorEvento implements Controlador<Evento> {
 
     //Definicion de los atributos
-    private DAO<TipoHabitacion> tipos = new TipoHabitacionDAO();
+    private DAO<Evento> eventos = new EventoDAO();
 
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
      * en la BD
      *
      */
-    public void add(TipoHabitacion t) {
-        if (tipos.get(t.getId()) == null) {
-            this.tipos.save(t);
+    
+    public void add(Evento t) {
+        if (eventos.get(t.getId()) == null) {
+            this.eventos.save(t);
         }
     }
 
@@ -26,8 +34,8 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      * actualizado en la BD
      *
      */
-    public void update(TipoHabitacion t) {
-        this.tipos.save(t);
+    public void update(Evento t) {
+        this.eventos.save(t);
 
     }
 
@@ -35,17 +43,17 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      * Metodo que recibe un id y lo elimina de la BD
      *
      */
-    public void delete(TipoHabitacion t) {
-
-        this.tipos.delete(t);
+    public void delete(Evento t) {
+        
+        this.eventos.delete(t);
     }
 
     /**
      * Metodo que pide un id al DAO y lo devuelve a la pantalla principal
      *
      */
-    public TipoHabitacion get(TipoHabitacion t) {
-        TipoHabitacion c = tipos.get(t.getId());
+    public Evento get(Evento t) {
+        Evento c = eventos.get(t.getId());
         return c;
     }
 
@@ -55,7 +63,9 @@ public class ControladorTipoHabitacion implements Controlador<TipoHabitacion> {
      *
      */
     @Override
-    public List<TipoHabitacion> listar() {
-        return tipos.getAll();
+    public List listar() {
+        return eventos.getAll();
     }
+
+   
 }
