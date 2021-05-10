@@ -4,6 +4,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,10 +42,10 @@ public class Cliente implements Serializable {
         this.reservas = reservas;
     }
 
-    public Cliente(){
-        
+    public Cliente() {
+
     }
-    
+
     /**
      *
      * @param name
@@ -57,6 +58,19 @@ public class Cliente implements Serializable {
         this.email = email;
         this.telefono = telefono;
         this.reservas = reservas;
+    }
+
+    /**
+     *
+     * @param name
+     * @param email
+     * @param telefono
+     */
+    public Cliente(String name, String email, String telefono) {
+        this.name = name;
+        this.email = email;
+        this.telefono = telefono;
+        this.reservas = new ArrayList<Reserva>();
     }
 
     /*
@@ -104,8 +118,6 @@ public class Cliente implements Serializable {
         this.reservas = reservas;
     }
 
-    
-    
     /**
      * Metodo que transforma el objeto DTO en cadena
      *

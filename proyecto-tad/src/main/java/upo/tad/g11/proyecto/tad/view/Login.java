@@ -36,7 +36,7 @@ public class Login extends UI {
         //Formulario de inicio de sesion
         TextField tfEmail = new TextField("Introduzca su correo para iniciar sesion:");
         TextField tfPass = new TextField("Introduzca su contraseña para iniciar sesion:");
-        Button submit = new Button("Guardar");
+        Button submit = new Button("Acceder");
 
         //Guardamos el formulario en el layout
         layout.addComponent(tfEmail);
