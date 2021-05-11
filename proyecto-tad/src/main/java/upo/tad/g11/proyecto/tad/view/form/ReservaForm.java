@@ -1,5 +1,6 @@
 package upo.tad.g11.proyecto.tad.view.form;
 
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
@@ -14,32 +15,38 @@ import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 
 public class ReservaForm extends FormLayout {
 
+    BeanItemContainer<Hotel> hoteles;
+    BeanItemContainer<TipoHabitacion> tipos;
+
     // Campos del formulario
     DateField fechaLlegada = new DateField("Fecha de Llegada");
     DateField fechaSalida = new DateField("Fecha de Salida");
-    ComboBox tipo = new ComboBox("Tipo de habitación");
-    ComboBox hotel = new ComboBox("Hotel");
+    ComboBox hotel = new ComboBox("Hotel", hoteles);
+    ComboBox tipo = new ComboBox("Tipo de habitación", tipos);
 
     // Constructor por defecto
     public ReservaForm() {
-        //hotel.addItems(getHoteles());
-        tipo.addItems(getTipos());
+        cargarHoteles();
+        hotel.setContainerDataSource(hoteles);
+        hotel.setItemCaptionPropertyId("nombre");
+
+        cargarTipos();
+        tipo.setContainerDataSource(tipos);
+        tipo.setItemCaptionPropertyId("nombre");
+
         setSpacing(true);
-        addComponents(fechaLlegada, fechaSalida, tipo,hotel);
+        addComponents(fechaLlegada, fechaSalida, tipo, hotel);
     }
 
-    private List<Hotel> getReservas() {
-        Controlador c = new ControladorCliente();
-        return c.listar();
-    }
-
-    private List<TipoHabitacion> getTipos() {
-        Controlador c = new ControladorTipoHabitacion();
-        return c.listar();
-    }
-    
-    private List<Hotel> getHoteles() {
+    private void cargarHoteles() {
+        hoteles = new BeanItemContainer<>(Hotel.class);
         Controlador c = new ControladorHotel();
-        return c.listar();
+        hoteles.addAll(c.listar());
+    }
+
+    private void cargarTipos() {
+        tipos = new BeanItemContainer<>(TipoHabitacion.class);
+        Controlador c = new ControladorTipoHabitacion();
+        tipos.addAll(c.listar());
     }
 }
