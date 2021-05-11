@@ -12,6 +12,7 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -97,8 +98,10 @@ public class GestionHabitaciones extends UI {
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
         Object[] VISIBLE_COLUMN_IDS = new String[]{"numero", "fumador", "hotel.nombre", "tipo.nombre"};
         grid.setColumns(VISIBLE_COLUMN_IDS);
+
         Grid.Column hotelColumn = grid.getColumn("hotel.nombre");
         hotelColumn.setHeaderCaption("Hotel");
+
         Grid.Column tipoColumn = grid.getColumn("tipo.nombre");
         tipoColumn.setHeaderCaption("Tipo");
 
@@ -108,7 +111,9 @@ public class GestionHabitaciones extends UI {
         grid.setEditorEnabled(true);
         grid.setImmediate(true);
         grid.setColumnReorderingAllowed(true);
-        grid.setSizeFull();
+        grid.setWidth("100%");
+        grid.setHeightMode(HeightMode.ROW);
+        grid.setHeightByRows(10);
 
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
@@ -116,7 +121,7 @@ public class GestionHabitaciones extends UI {
         btnEliminar.addStyleName(ValoTheme.BUTTON_DANGER);
         btnEliminar.setEnabled(false);
 
-        //Lsteners para los elementos interactivos de la tabla:
+        //Listeners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
         grid.addSelectionListener(selectionEvent -> {
             if (grid.getSelectedRows().size() > 0) {
@@ -187,9 +192,11 @@ public class GestionHabitaciones extends UI {
         layout.addComponents(vLayoutForm, vLayoutTable);
         layout.setMargin(true);
         layout.setSpacing(true);
-        layout.setSizeFull();
+        layout.setWidth("100%");
 
         setContent(layout);
+
+        beans.addAll(controladorH.listar());
     }
 
     @WebServlet(value = {"/habitaciones/*"}, name = "GestionHabitaciones", asyncSupported = true)

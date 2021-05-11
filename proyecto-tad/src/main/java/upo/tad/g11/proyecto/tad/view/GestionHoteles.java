@@ -12,6 +12,7 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -102,7 +103,9 @@ public class GestionHoteles extends UI {
         grid.setEditorEnabled(true);
         grid.setImmediate(true);
         grid.setColumnReorderingAllowed(true);
-        grid.setSizeFull();
+        grid.setWidth("100%");
+        grid.setHeightMode(HeightMode.ROW);
+        grid.setHeightByRows(10);
 
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
@@ -182,7 +185,7 @@ public class GestionHoteles extends UI {
         layout.addComponents(vLayoutForm, vLayoutTable);
         layout.setMargin(true);
         layout.setSpacing(true);
-        layout.setSizeFull();
+        layout.setWidth("100%");
 
         setContent(layout);
     }

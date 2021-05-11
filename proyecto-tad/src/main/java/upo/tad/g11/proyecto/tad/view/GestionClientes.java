@@ -11,20 +11,22 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import upo.tad.g11.proyecto.tad.controller.Controlador;
 import upo.tad.g11.proyecto.tad.controller.ControladorCliente;
 import upo.tad.g11.proyecto.tad.controller.ControladorReserva;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
@@ -41,11 +43,11 @@ import upo.tad.g11.proyecto.tad.view.form.ReservaForm;
 @Theme("mytheme")
 @Title("Clientes")
 public class GestionClientes extends UI {
-
-    ControladorReserva controladorR = new ControladorReserva();
-    ControladorCliente controladorC = new ControladorCliente();
+    
+    Controlador controladorR = new ControladorReserva();
+    Controlador controladorC = new ControladorCliente();
     Cliente clienteActual = null;
-
+    
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         // Obtenemos la sesion HTTP del usuario actual.
@@ -67,7 +69,7 @@ public class GestionClientes extends UI {
         itemCliente.addItemProperty("name", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("email", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("telefono", new ObjectProperty("", String.class));
-
+        
         PropertysetItem itemReserva = new PropertysetItem();
         itemReserva.addItemProperty("fechaLlegada", new ObjectProperty(null, Date.class));
         itemReserva.addItemProperty("fechaSalida", new ObjectProperty(null, Date.class));
@@ -89,7 +91,7 @@ public class GestionClientes extends UI {
         Button crearClienteBtn = new Button("Crear Cliente");
         crearClienteBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         formCliente.addComponent(crearClienteBtn);
-
+        
         Button crearReservaBtn = new Button("Crear Reserva");
         crearReservaBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         formReserva.addComponent(crearReservaBtn);
@@ -104,7 +106,7 @@ public class GestionClientes extends UI {
             UI.getCurrent().getPage().setLocation("/menu");
         }
         );
-
+        
         vLayoutForm.addComponents(menuBtn, formCliente);
         vLayoutForm.addComponents(formReserva);
 
@@ -122,83 +124,95 @@ public class GestionClientes extends UI {
         // Contenedor para almacenar los beans de la entidad CRUD.
         BeanItemContainer<Reserva> beansReservas
                 = new BeanItemContainer<>(Reserva.class);
-
+        
         beansReservas.addNestedContainerProperty("hotel.nombre");
         beansReservas.addNestedContainerProperty("habitacion.numero");
 
         //beans.addNestedContainerProperty("tipo.nombre");
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
-        Table tableCliente = new Table("Clientes", beansClientes);
-        Table tableReserva = new Table("Reservas", beansReservas);
+        Grid gridCliente = new Grid("Clientes", beansClientes);
+        Grid gridReserva = new Grid("Reservas", beansReservas);
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
-        tableCliente.setEditable(false);
-        tableCliente.setSelectable(true);
-        tableCliente.setImmediate(true);
-        tableCliente.setColumnReorderingAllowed(true);
-        tableCliente.setSizeFull();
-        tableCliente.setPageLength(tableCliente.size());
-        tableCliente.setColumnHeader("dni", "DNI");
-        tableCliente.setColumnHeader("name", "Nombre");
-        tableCliente.setColumnHeader("email", "Correo Electronico");
-        tableCliente.setColumnHeader("telefono", "Telefono");
-        tableCliente.setVisibleColumns("dni", "name", "email", "telefono");
+        gridCliente.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridCliente.setEditorEnabled(true);
+        gridCliente.setImmediate(true);
+        gridCliente.setColumnReorderingAllowed(true);
+        gridCliente.setWidth("100%");
+        gridCliente.setHeightMode(HeightMode.ROW);
+        gridCliente.setHeightByRows(5);
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
-        tableReserva.setEditable(false);
-        tableReserva.setSelectable(true);
-        tableReserva.setImmediate(true);
-        tableReserva.setColumnReorderingAllowed(true);
-        tableReserva.setSizeFull();
-        tableReserva.setPageLength(tableReserva.size());
-        tableReserva.setColumnHeader("id", "ID");
-        tableReserva.setColumnHeader("fechaLlegada", "Fecha de llegada");
-        tableReserva.setColumnHeader("fechaSalida", "Fecha de salida");
-        tableReserva.setColumnHeader("hotel", "Hotel");
-        tableReserva.setColumnHeader("habitacion", "Habitacion");
-        tableReserva.setVisibleColumns("id", "fechaLlegada", "fechaSalida", "hotel", "habitacion");
+        gridReserva.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridReserva.setEditorEnabled(true);
+        gridReserva.setImmediate(true);
+        gridReserva.setColumnReorderingAllowed(true);
+        gridReserva.setWidth("100%");
+        gridReserva.setHeightMode(HeightMode.ROW);
+        gridReserva.setHeightByRows(5);
+
+        // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"id", "fechaLlegada", "fechaSalida", "hotel.nombre", "habitacion.numero"};
+        gridReserva.setColumns(VISIBLE_COLUMN_IDS);
+        
+        Grid.Column llegadaColumn = gridReserva.getColumn("fechaLlegada");
+        llegadaColumn.setHeaderCaption("Fecha de llegada");
+        
+        Grid.Column salidaColumn = gridReserva.getColumn("fechaSalida");
+        salidaColumn.setHeaderCaption("Fecha de salida");
+        
+        Grid.Column hotelColumn = gridReserva.getColumn("hotel.nombre");
+        hotelColumn.setHeaderCaption("Hotel");
+        
+        Grid.Column habitacionColumn = gridReserva.getColumn("habitacion.numero");
+        habitacionColumn.setHeaderCaption("Habitacion");
 
         // Anyadimos los componentes de control para realizar las acciones de
-        // editar y eliminar sobre los elementos de la tabla.
-        CheckBox editable = new CheckBox("Editar");
+        // y eliminar sobre los elementos de la tabla.
         Button btnEliminar = new Button("Eliminar");
         btnEliminar.addStyleName(ValoTheme.BUTTON_DANGER);
         btnEliminar.setEnabled(false);
 
         //Lsteners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
-        tableCliente.addListener((ItemClickEvent.ItemClickListener) (ItemClickEvent event) -> {
-
-            btnEliminar.setEnabled(true);
+        gridCliente.addSelectionListener(selectionEvent -> {
+            if (gridCliente.getSelectedRows().size() > 0) {
+                btnEliminar.setEnabled(true);
+            } else {
+                btnEliminar.setEnabled(false);
+            }
         });
 
-        // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
-        btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            beansClientes.removeItem(tableCliente.getValue());
-            btnEliminar.setEnabled(false);
-        });
-
-        tableCliente.addValueChangeListener(
-                (Property.ValueChangeEvent event) -> {
-                    // Returns the row selected on table
-                    Object itemId = tableCliente.getValue();
-                    // get the index of the item selected
-                    BeanItem<Cliente> bean = beansClientes.getItem(itemId);
-                    if (bean != null) {
-                        clienteActual = bean.getBean();
+        // Elimina el/los elemento/s de la/s fila/s seleccionada/s al pulsa el boton de eliminar.
+        btnEliminar.addClickListener(
+                (Button.ClickEvent event) -> {
+                    for (Object itemId : gridCliente.getSelectedRows()) {
+                        controladorC.delete(itemId);
+                        beansClientes.removeItem(itemId);
                     }
-                }
-        );
-
-        // Activa/desactiva el modo de edicion sobre la tabla.
-        editable.addValueChangeListener(
-                (Property.ValueChangeEvent event) -> {
-                    Boolean checked = (Boolean) event.getProperty().getValue();
-                    tableCliente.setEditable(checked);
-                }
-        );
+                    btnEliminar.setEnabled(false);
+                });
+        
+        gridCliente.addSelectionListener(selectionEvent -> {
+            if (gridCliente.getSelectedRows().size() == 1) {
+                List seleccion = (List) gridCliente.getSelectedRows();
+                clienteActual = (Cliente) seleccion.get(0);
+            }
+        });
+        
+        gridCliente.getEditorFieldGroup().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+            
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                Object itemId = gridCliente.getEditedItemId();
+                controladorC.update(itemId);
+            }
+        });
 
         // Mapea los valores de los campos del formulario a una nueva instancia de
         // la entidad CRUD y la anyade al contenedor de beans.
@@ -207,7 +221,7 @@ public class GestionClientes extends UI {
             String name = (String) binderCliente.getField("name").getValue();
             String email = (String) binderCliente.getField("email").getValue();
             String telefono = (String) binderCliente.getField("telefono").getValue();
-
+            
             Cliente c = new Cliente(dni, name, email, telefono);
             controladorC.add(c);
             beansClientes.addBean(c);
@@ -218,16 +232,17 @@ public class GestionClientes extends UI {
             // Create an instance of SimpleDateFormat used for formatting 
             // the string representation of date according to the chosen pattern
             DateFormat df = new SimpleDateFormat(pattern);
-
+            
             String fechaLlegada = df.format(binderReserva.getField("fechaLlegada").getValue());
             String fechaSalida = df.format(binderReserva.getField("fechaSalida").getValue());
             TipoHabitacion tipo = (TipoHabitacion) binderReserva.getField("tipoHabitacion").getValue();
             Hotel hotel = (Hotel) binderReserva.getField("hotel").getValue();
-
+            
             System.out.println(hotel);
-
+            
             Reserva r = new Reserva(fechaLlegada, fechaSalida);
-            controladorR.add(r, tipo);
+            ControladorReserva cr = (ControladorReserva) controladorR;
+            cr.add(r, tipo);
             //beansReservas.addBean(r);
             //beansClientes.addBean(c);
         });
@@ -245,7 +260,7 @@ public class GestionClientes extends UI {
         );
 
         // Anyadimos los componetes al layout de la tabla y se aplican los estilos.
-        vLayoutTable.addComponents(cerrarSesionBtn, tableCliente, editable, btnEliminar, tableReserva);
+        vLayoutTable.addComponents(cerrarSesionBtn, gridCliente, btnEliminar, gridReserva);
         vLayoutTable.setSpacing(true);
 
         //Agregamos a la tabla la informacion de la BD
@@ -258,11 +273,11 @@ public class GestionClientes extends UI {
         layout.addComponents(vLayoutForm, vLayoutTable);
         layout.setMargin(true);
         layout.setSpacing(true);
-        layout.setSizeFull();
-
+        layout.setWidth("100%");
+        
         setContent(layout);
     }
-
+    
     @WebServlet(value = {"/clientes/*"}, name = "GestionClientes", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = false, ui = GestionClientes.class)
     public static class GestionHotelesServlet extends VaadinServlet {

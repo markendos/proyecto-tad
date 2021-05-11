@@ -12,6 +12,7 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -95,6 +96,7 @@ public class GestionTiposHabitacion extends UI {
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
         Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "metros", "terraza", "precio"};
         grid.setColumns(VISIBLE_COLUMN_IDS);
+        
         Grid.Column precioColumn = grid.getColumn("precio");
         precioColumn.setHeaderCaption("Precio/noche");
 
@@ -104,7 +106,9 @@ public class GestionTiposHabitacion extends UI {
         grid.setEditorEnabled(true);
         grid.setImmediate(true);
         grid.setColumnReorderingAllowed(true);
-        grid.setSizeFull();
+        grid.setWidth("100%");
+        grid.setHeightMode(HeightMode.ROW);
+        grid.setHeightByRows(10);
 
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
@@ -112,7 +116,7 @@ public class GestionTiposHabitacion extends UI {
         btnEliminar.addStyleName(ValoTheme.BUTTON_DANGER);
         btnEliminar.setEnabled(false);
 
-        //Lsteners para los elementos interactivos de la tabla:
+        //Listeners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
         grid.addSelectionListener(selectionEvent -> {
             if (grid.getSelectedRows().size() > 0) {
@@ -184,11 +188,9 @@ public class GestionTiposHabitacion extends UI {
         // la tabla al layout principal de la UI. Se aplican tambian los estilos.
         layout.addComponents(vLayoutForm, vLayoutTable);
 
-        layout.setMargin(
-                true);
-        layout.setSpacing(
-                true);
-        layout.setSizeFull();
+        layout.setMargin(true);
+        layout.setSpacing(true);
+        layout.setWidth("100%");
 
         setContent(layout);
 
