@@ -33,8 +33,12 @@ public class Menu extends UI {
         }*/
         String content = "<h1><strong>Menú</strong></h1><ul>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/hoteles" + "'><h2>Gestión de Hoteles</h2></a></li>";
-        content += "<li><a href='" + vaadinRequest.getContextPath() + "/habitaciones" + "'><h2>Gestión de Habitaciones</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/personal" + "'><h2>Gestión de Personal</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/instalaciones" + "'><h2>Gestión de Instalaciones</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/tiposHabitacion" + "'><h2>Gestión de Tipos de Habitación</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/habitaciones" + "'><h2>Gestión de Habitaciones</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/servicios" + "'><h2>Gestión de Servicios</h2></a></li>";
+        content += "<li><a href='" + vaadinRequest.getContextPath() + "/eventos" + "'><h2>Gestión de Eventos</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/clientes" + "'><h2>Gestión de Clientes</h2></a></li>";
         content += "</ul>";
 
