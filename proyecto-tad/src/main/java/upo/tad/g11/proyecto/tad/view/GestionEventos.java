@@ -43,6 +43,11 @@ public class GestionEventos extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
+
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -95,7 +100,7 @@ public class GestionEventos extends UI {
         // Contenedor para almacenar los beans de la entidad CRUD.
         BeanItemContainer<Evento> beans
                 = new BeanItemContainer<>(Evento.class);
-        
+
         beans.addNestedContainerProperty("hotel.nombre");
 
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
@@ -164,7 +169,7 @@ public class GestionEventos extends UI {
             String descripcion = (String) binder.getField("descripcion").getValue();
             Date fecha = (Date) (binder.getField("fecha").getValue());
             Hotel hotel = (Hotel) (binder.getField("hotel").getValue());
-            
+
             Evento ev = new Evento(id, nombre, descripcion, fecha, hotel);
             beans.addBean(ev);
             controladorE.add(ev);

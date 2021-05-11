@@ -58,6 +58,11 @@ public class GestionClientes extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
+
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -324,6 +329,8 @@ public class GestionClientes extends UI {
             if (errores.length() == 0) {
                 cr.add(r);
                 beansReservas.addBean(r);
+                beansReservas.addBean(r);
+                cr.add(r);
 
                 clienteActual.getReservas().add(r);
 
