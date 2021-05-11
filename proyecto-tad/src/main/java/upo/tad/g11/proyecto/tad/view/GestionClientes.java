@@ -22,9 +22,14 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import upo.tad.g11.proyecto.tad.controller.ControladorCliente;
+import upo.tad.g11.proyecto.tad.controller.ControladorReserva;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
+import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 import upo.tad.g11.proyecto.tad.view.form.ClienteForm;
 import upo.tad.g11.proyecto.tad.view.form.ReservaForm;
@@ -36,6 +41,10 @@ import upo.tad.g11.proyecto.tad.view.form.ReservaForm;
 @Theme("mytheme")
 @Title("Clientes")
 public class GestionClientes extends UI {
+
+    ControladorReserva controladorR = new ControladorReserva();
+    ControladorCliente controladorC = new ControladorCliente();
+    Cliente clienteActual = null;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -72,14 +81,18 @@ public class GestionClientes extends UI {
         // Realizamos el binding del formulario entre la UI y el modelo asociado.
         FieldGroup binderCliente = new FieldGroup(itemCliente);
         binderCliente.bindMemberFields(formCliente);
-
+        // Realizamos el binding del formulario entre la UI y el modelo asociado.
         FieldGroup binderReserva = new FieldGroup(itemReserva);
         binderReserva.bindMemberFields(formReserva);
 
         // Creamos un boton para enviar el formulario y lo anyadimos a este
-        Button crearBtn = new Button("Crear");
-        crearBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        formCliente.addComponent(crearBtn);
+        Button crearClienteBtn = new Button("Crear Cliente");
+        crearClienteBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        formCliente.addComponent(crearClienteBtn);
+
+        Button crearReservaBtn = new Button("Crear Reserva");
+        crearReservaBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        formReserva.addComponent(crearReservaBtn);
 
         // Boton para volver al menu
         Button menuBtn = new Button("Menú");
@@ -103,12 +116,20 @@ public class GestionClientes extends UI {
 
         //layoutBotones.setMargin(true);
         // Contenedor para almacenar los beans de la entidad CRUD.
-        BeanItemContainer<Cliente> beans
+        BeanItemContainer<Cliente> beansClientes
                 = new BeanItemContainer<>(Cliente.class);
+
+        // Contenedor para almacenar los beans de la entidad CRUD.
+        BeanItemContainer<Reserva> beansReservas
+                = new BeanItemContainer<>(Reserva.class);
+
+        beansReservas.addNestedContainerProperty("hotel.nombre");
+        beansReservas.addNestedContainerProperty("habitacion.numero");
 
         //beans.addNestedContainerProperty("tipo.nombre");
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
-        Table tableCliente = new Table("Clientes", beans);
+        Table tableCliente = new Table("Clientes", beansClientes);
+        Table tableReserva = new Table("Reservas", beansReservas);
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
@@ -124,6 +145,21 @@ public class GestionClientes extends UI {
         tableCliente.setColumnHeader("telefono", "Telefono");
         tableCliente.setVisibleColumns("dni", "name", "email", "telefono");
 
+        // Establecemos las propiedades de la tabla para obtener el
+        // comportamiento deseado.
+        tableReserva.setEditable(false);
+        tableReserva.setSelectable(true);
+        tableReserva.setImmediate(true);
+        tableReserva.setColumnReorderingAllowed(true);
+        tableReserva.setSizeFull();
+        tableReserva.setPageLength(tableReserva.size());
+        tableReserva.setColumnHeader("id", "ID");
+        tableReserva.setColumnHeader("fechaLlegada", "Fecha de llegada");
+        tableReserva.setColumnHeader("fechaSalida", "Fecha de salida");
+        tableReserva.setColumnHeader("hotel", "Hotel");
+        tableReserva.setColumnHeader("habitacion", "Habitacion");
+        tableReserva.setVisibleColumns("id", "fechaLlegada", "fechaSalida", "hotel", "habitacion");
+
         // Anyadimos los componentes de control para realizar las acciones de
         // editar y eliminar sobre los elementos de la tabla.
         CheckBox editable = new CheckBox("Editar");
@@ -135,24 +171,12 @@ public class GestionClientes extends UI {
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
         tableCliente.addListener((ItemClickEvent.ItemClickListener) (ItemClickEvent event) -> {
 
-            // Returns the row selected on table
-            Object itemId = tableCliente.getValue();
-            // get the index of the item selected
-            BeanItem<Cliente> bean = beans.getItem(itemId);
-            if (bean != null) {
-                Cliente c = bean.getBean();
-                System.out.println(c);
-                System.out.println(c);
-                System.out.println(c);
-                System.out.println(c);
-            }
-
             btnEliminar.setEnabled(true);
         });
 
         // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            beans.removeItem(tableCliente.getValue());
+            beansClientes.removeItem(tableCliente.getValue());
             btnEliminar.setEnabled(false);
         });
 
@@ -161,13 +185,9 @@ public class GestionClientes extends UI {
                     // Returns the row selected on table
                     Object itemId = tableCliente.getValue();
                     // get the index of the item selected
-                    BeanItem<Cliente> bean = beans.getItem(itemId);
+                    BeanItem<Cliente> bean = beansClientes.getItem(itemId);
                     if (bean != null) {
-                        Cliente c = bean.getBean();
-                        System.out.println(c);
-                        System.out.println(c);
-                        System.out.println(c);
-                        System.out.println(c);
+                        clienteActual = bean.getBean();
                     }
                 }
         );
@@ -182,18 +202,35 @@ public class GestionClientes extends UI {
 
         // Mapea los valores de los campos del formulario a una nueva instancia de
         // la entidad CRUD y la anyade al contenedor de beans.
-        crearBtn.addClickListener(e
-                -> {
+        crearClienteBtn.addClickListener(e -> {
             String dni = (String) binderCliente.getField("dni").getValue();
             String name = (String) binderCliente.getField("name").getValue();
             String email = (String) binderCliente.getField("email").getValue();
             String telefono = (String) binderCliente.getField("telefono").getValue();
 
             Cliente c = new Cliente(dni, name, email, telefono);
-            beans.addBean(c);
-        }
-        );
+            controladorC.add(c);
+            beansClientes.addBean(c);
+        });
+        crearReservaBtn.addClickListener(e -> {
+            String pattern = "MM/dd/yyyy HH:mm:ss";
 
+            // Create an instance of SimpleDateFormat used for formatting 
+            // the string representation of date according to the chosen pattern
+            DateFormat df = new SimpleDateFormat(pattern);
+
+            String fechaLlegada = df.format(binderReserva.getField("fechaLlegada").getValue());
+            String fechaSalida = df.format(binderReserva.getField("fechaSalida").getValue());
+            TipoHabitacion tipo = (TipoHabitacion) binderReserva.getField("tipoHabitacion").getValue();
+            Hotel hotel = (Hotel) binderReserva.getField("hotel").getValue();
+
+            System.out.println(hotel);
+
+            Reserva r = new Reserva(fechaLlegada, fechaSalida);
+            controladorR.add(r, tipo);
+            //beansReservas.addBean(r);
+            //beansClientes.addBean(c);
+        });
         // Boton para realizar la accion de logout
         Button cerrarSesionBtn = new Button("Cerrar Sesión");
         cerrarSesionBtn.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -208,8 +245,12 @@ public class GestionClientes extends UI {
         );
 
         // Anyadimos los componetes al layout de la tabla y se aplican los estilos.
-        vLayoutTable.addComponents(cerrarSesionBtn, tableCliente, editable, btnEliminar);
+        vLayoutTable.addComponents(cerrarSesionBtn, tableCliente, editable, btnEliminar, tableReserva);
         vLayoutTable.setSpacing(true);
+
+        //Agregamos a la tabla la informacion de la BD
+        beansClientes.addAll(controladorC.listar());
+        beansReservas.addAll(controladorR.listar());
 
         /*------------------(END)TABLA (read, update, delete)------------------*/
         // Anyadimos los componentes que contienen los layouts del formulario y
