@@ -11,16 +11,14 @@ public class ClienteForm extends FormLayout {
 
     // Campos del formulario
     TextField dni = new TextField("DNI");
-    TextField name = new TextField("Nombre");
+    TextField nombre = new TextField("Nombre");
     TextField email = new TextField("Correo electronico");
     TextField telefono = new TextField("Teléfono");
 
     // Constructor por defecto
     public ClienteForm() {
-        //hotel.addItems(getHoteles());
-        //tipo.addItems(getTipos());
         setSpacing(true);
-        addComponents(dni, name, email, telefono);
+        addComponents(dni, nombre, email, telefono);
     }
 
     private List<Hotel> getClientes() {

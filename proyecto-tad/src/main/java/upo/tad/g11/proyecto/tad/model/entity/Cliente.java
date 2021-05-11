@@ -49,13 +49,13 @@ public class Cliente implements Serializable {
 
     /**
      *
-     * @param name
+     * @param nombre
      * @param email
      * @param telefono
      * @param reservas
      */
-    public Cliente(String name, String email, String telefono, List<Reserva> reservas) {
-        this.nombre = name;
+    public Cliente(String nombre, String email, String telefono, List<Reserva> reservas) {
+        this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.reservas = reservas;
@@ -63,12 +63,12 @@ public class Cliente implements Serializable {
 
     /**
      *
-     * @param name
+     * @param nombre
      * @param email
      * @param telefono
      */
-    public Cliente(String name, String email, String telefono) {
-        this.nombre = name;
+    public Cliente(String nombre, String email, String telefono) {
+        this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.reservas = new ArrayList<Reserva>();
@@ -78,6 +78,7 @@ public class Cliente implements Serializable {
      * @param nombre
      * @param email
      * @param telefono
+     * @param dni
      */
     public Cliente(String dni, String nombre, String email, String telefono) {
         this.dni = dni;

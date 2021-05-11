@@ -71,7 +71,7 @@ public class GestionClientes extends UI {
          */
         PropertysetItem itemCliente = new PropertysetItem();
         itemCliente.addItemProperty("dni", new ObjectProperty("", String.class));
-        itemCliente.addItemProperty("name", new ObjectProperty("", String.class));
+        itemCliente.addItemProperty("nombre", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("email", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("telefono", new ObjectProperty("", String.class));
 
@@ -140,7 +140,7 @@ public class GestionClientes extends UI {
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
-        gridCliente.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridCliente.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridCliente.setEditorEnabled(true);
         gridCliente.setImmediate(true);
         gridCliente.setColumnReorderingAllowed(true);
@@ -154,26 +154,32 @@ public class GestionClientes extends UI {
 // Set up a filter for all columns
         for (Object pid : gridCliente.getContainerDataSource()
                 .getContainerPropertyIds()) {
-            HeaderCell cell = filterRowClientes.getCell(pid);
+            if (!pid.equals("reservas")) {
+                HeaderCell cell = filterRowClientes.getCell(pid);
 
-            // Have an input field to use for filter
-            TextField filterField = new TextField();
-            filterField.setColumns(8);
+                // Have an input field to use for filter
+                TextField filterField = new TextField();
+                filterField.setColumns(8);
 
-            // Update filter When the filter input is changed
-            filterField.addTextChangeListener(change -> {
-                // Can't modify filters so need to replace
-                beansClientes.removeContainerFilters(pid);
+                // Update filter When the filter input is changed
+                filterField.addTextChangeListener(change -> {
+                    // Can't modify filters so need to replace
+                    beansClientes.removeContainerFilters(pid);
 
-                // (Re)create the filter if necessary
-                if (!change.getText().isEmpty()) {
-                    beansClientes.addContainerFilter(
-                            new SimpleStringFilter(pid,
-                                    change.getText(), true, false));
-                }
-            });
-            cell.setComponent(filterField);
+                    // (Re)create the filter if necessary
+                    if (!change.getText().isEmpty()) {
+                        beansClientes.addContainerFilter(
+                                new SimpleStringFilter(pid,
+                                        change.getText(), true, false));
+                    }
+                });
+                cell.setComponent(filterField);
+            }
         }
+
+        // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
+        Object[] VISIBLE_COLUMN_IDS_CLIENTES = new String[]{"dni", "nombre", "email", "telefono"};
+        gridCliente.setColumns(VISIBLE_COLUMN_IDS_CLIENTES);
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
@@ -236,8 +242,8 @@ public class GestionClientes extends UI {
 
         //Lsteners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
-        gridCliente.addSelectionListener(selectionEvent -> {
-            if (gridCliente.getSelectedRows().size() > 0) {
+        gridReserva.addSelectionListener(selectionEvent -> {
+            if (gridReserva.getSelectedRows().size() > 0) {
                 btnEliminar.setEnabled(true);
             } else {
                 btnEliminar.setEnabled(false);
@@ -247,17 +253,23 @@ public class GestionClientes extends UI {
         // Elimina el/los elemento/s de la/s fila/s seleccionada/s al pulsa el boton de eliminar.
         btnEliminar.addClickListener(
                 (Button.ClickEvent event) -> {
-                    for (Object itemId : gridCliente.getSelectedRows()) {
-                        controladorC.delete(itemId);
-                        beansClientes.removeItem(itemId);
+                    for (Object itemId : gridReserva.getSelectedRows()) {
+                        controladorR.delete(itemId);
+                        beansReservas.removeItem(itemId);
+                        
                     }
                     btnEliminar.setEnabled(false);
                 });
 
         gridCliente.addSelectionListener(selectionEvent -> {
             if (gridCliente.getSelectedRows().size() == 1) {
-                List seleccion = (List) gridCliente.getSelectedRows();
-                clienteActual = (Cliente) seleccion.get(0);
+                clienteActual = (Cliente) gridCliente.getSelectedRow();
+                if (clienteActual != null) {
+                    beansReservas.removeAllItems();
+                    beansReservas.addAll(clienteActual.getReservas());
+                } else {
+                    beansReservas.addAll(controladorR.listar());
+                }
             }
         });
 
@@ -277,11 +289,11 @@ public class GestionClientes extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearClienteBtn.addClickListener(e -> {
             String dni = (String) binderCliente.getField("dni").getValue();
-            String name = (String) binderCliente.getField("name").getValue();
+            String nombre = (String) binderCliente.getField("nombre").getValue();
             String email = (String) binderCliente.getField("email").getValue();
             String telefono = (String) binderCliente.getField("telefono").getValue();
 
-            Cliente c = new Cliente(dni, name, email, telefono);
+            Cliente c = new Cliente(dni, nombre, email, telefono);
             controladorC.add(c);
             beansClientes.addBean(c);
         });
@@ -302,22 +314,22 @@ public class GestionClientes extends UI {
             ControladorReserva cr = (ControladorReserva) controladorR;
             ControladorCliente cc = (ControladorCliente) controladorC;
             r = cr.prepararReserva(r, tipo);
-            String errores="";
-            if(r.getHabitacion() == null){
-                errores+="No se ha encontrado una habitación disponible de esas características\n";
+            String errores = "";
+            if (r.getHabitacion() == null) {
+                errores += "No se ha encontrado una habitación disponible de esas características\n";
             }
-            if(clienteActual == null){
-                errores+="Debe seleccionar a un cliente\n";
+            if (clienteActual == null) {
+                errores += "Debe seleccionar a un cliente\n";
             }
-            if (errores.length()==0) {
-                beansReservas.addBean(r);
+            if (errores.length() == 0) {
                 cr.add(r);
-                
+                beansReservas.addBean(r);
+
                 clienteActual.getReservas().add(r);
-                
+
                 cc.update(clienteActual);
-                clienteActual=null;
-            }else{
+                clienteActual = null;
+            } else {
                 Notification.show("Se ha producido un error", errores, Notification.Type.ERROR_MESSAGE);
             }
             //beansReservas.addBean(r);
@@ -337,7 +349,7 @@ public class GestionClientes extends UI {
         );
 
         // Anyadimos los componetes al layout de la tabla y se aplican los estilos.
-        vLayoutTable.addComponents(cerrarSesionBtn, gridCliente, btnEliminar, gridReserva);
+        vLayoutTable.addComponents(cerrarSesionBtn, gridCliente, gridReserva, btnEliminar);
         vLayoutTable.setSpacing(true);
 
         //Agregamos a la tabla la informacion de la BD
