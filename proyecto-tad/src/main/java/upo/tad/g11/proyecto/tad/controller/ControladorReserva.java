@@ -44,7 +44,7 @@ public class ControladorReserva implements Controlador<Reserva> {
             HabitacionDAO habs = new HabitacionDAO();
             Habitacion h = habs.getHabitacionesby(t.getHotel(), tipo);
             //Guardamos la hora de la reserva
-            String pattern = "MM/dd/yyyy HH:mm:ss";
+            String pattern = "dd/MM/yyyy HH:mm:ss";
 
             // Create an instance of SimpleDateFormat used for formatting 
             // the string representation of date according to the chosen pattern

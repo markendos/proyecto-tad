@@ -22,6 +22,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.HeaderCell;
 import com.vaadin.ui.Grid.HeaderRow;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -285,7 +286,7 @@ public class GestionClientes extends UI {
             beansClientes.addBean(c);
         });
         crearReservaBtn.addClickListener(e -> {
-            String pattern = "MM/dd/yyyy HH:mm:ss";
+            String pattern = "dd/MM/yyyy";
 
             // Create an instance of SimpleDateFormat used for formatting 
             // the string representation of date according to the chosen pattern
@@ -293,14 +294,32 @@ public class GestionClientes extends UI {
 
             String fechaLlegada = df.format(binderReserva.getField("fechaLlegada").getValue());
             String fechaSalida = df.format(binderReserva.getField("fechaSalida").getValue());
-            TipoHabitacion tipo = (TipoHabitacion) binderReserva.getField("tipoHabitacion").getValue();
+            TipoHabitacion tipo = (TipoHabitacion) binderReserva.getField("tipo").getValue();
             Hotel hotel = (Hotel) binderReserva.getField("hotel").getValue();
 
-            System.out.println(hotel);
-
             Reserva r = new Reserva(fechaLlegada, fechaSalida);
+            r.setHotel(hotel);
             ControladorReserva cr = (ControladorReserva) controladorR;
-            cr.prepararReserva(r, tipo);
+            ControladorCliente cc = (ControladorCliente) controladorC;
+            r = cr.prepararReserva(r, tipo);
+            String errores="";
+            if(r.getHabitacion() == null){
+                errores+="No se ha encontrado una habitación disponible de esas características\n";
+            }
+            if(clienteActual == null){
+                errores+="Debe seleccionar a un cliente\n";
+            }
+            if (errores.length()==0) {
+                beansReservas.addBean(r);
+                cr.add(r);
+                
+                clienteActual.getReservas().add(r);
+                
+                cc.update(clienteActual);
+                clienteActual=null;
+            }else{
+                Notification.show("Se ha producido un error", errores, Notification.Type.ERROR_MESSAGE);
+            }
             //beansReservas.addBean(r);
             //beansClientes.addBean(c);
         });
