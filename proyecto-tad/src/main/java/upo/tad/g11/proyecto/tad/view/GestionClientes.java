@@ -58,6 +58,11 @@ public class GestionClientes extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
+
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -302,22 +307,22 @@ public class GestionClientes extends UI {
             ControladorReserva cr = (ControladorReserva) controladorR;
             ControladorCliente cc = (ControladorCliente) controladorC;
             r = cr.prepararReserva(r, tipo);
-            String errores="";
-            if(r.getHabitacion() == null){
-                errores+="No se ha encontrado una habitación disponible de esas características\n";
+            String errores = "";
+            if (r.getHabitacion() == null) {
+                errores += "No se ha encontrado una habitación disponible de esas características\n";
             }
-            if(clienteActual == null){
-                errores+="Debe seleccionar a un cliente\n";
+            if (clienteActual == null) {
+                errores += "Debe seleccionar a un cliente\n";
             }
-            if (errores.length()==0) {
+            if (errores.length() == 0) {
                 beansReservas.addBean(r);
                 cr.add(r);
-                
+
                 clienteActual.getReservas().add(r);
-                
+
                 cc.update(clienteActual);
-                clienteActual=null;
-            }else{
+                clienteActual = null;
+            } else {
                 Notification.show("Se ha producido un error", errores, Notification.Type.ERROR_MESSAGE);
             }
             //beansReservas.addBean(r);

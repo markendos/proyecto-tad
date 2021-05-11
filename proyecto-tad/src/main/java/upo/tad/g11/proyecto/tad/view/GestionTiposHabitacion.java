@@ -37,6 +37,11 @@ public class GestionTiposHabitacion extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
+
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -96,7 +101,7 @@ public class GestionTiposHabitacion extends UI {
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
         Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "metros", "terraza", "precio"};
         grid.setColumns(VISIBLE_COLUMN_IDS);
-        
+
         Grid.Column precioColumn = grid.getColumn("precio");
         precioColumn.setHeaderCaption("Precio/noche");
 

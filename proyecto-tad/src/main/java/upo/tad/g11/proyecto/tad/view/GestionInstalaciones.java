@@ -36,6 +36,11 @@ public class GestionInstalaciones extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
+
         // Creamos el layout principal de la UI.
         HorizontalLayout layout = new HorizontalLayout();
 
@@ -124,12 +129,12 @@ public class GestionInstalaciones extends UI {
 
         // Elimina el/los elemento/s de la/s fila/s seleccionada/s al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
-                    for (Object itemId : grid.getSelectedRows()) {
-                        controladorI.delete(itemId);
-                        beans.removeItem(itemId);
-                    }
-                    btnEliminar.setEnabled(false);
-                });
+            for (Object itemId : grid.getSelectedRows()) {
+                controladorI.delete(itemId);
+                beans.removeItem(itemId);
+            }
+            btnEliminar.setEnabled(false);
+        });
 
         grid.getEditorFieldGroup().addCommitHandler(new FieldGroup.CommitHandler() {
             @Override
@@ -185,7 +190,7 @@ public class GestionInstalaciones extends UI {
         layout.setSizeFull();
 
         setContent(layout);
-        
+
         beans.addAll(controladorI.listar());
     }
 
