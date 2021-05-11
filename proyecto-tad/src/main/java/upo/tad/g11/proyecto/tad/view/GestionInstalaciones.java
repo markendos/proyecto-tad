@@ -20,9 +20,13 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bson.types.ObjectId;
 import upo.tad.g11.proyecto.tad.controller.Controlador;
+import upo.tad.g11.proyecto.tad.controller.ControladorHabitacion;
 import upo.tad.g11.proyecto.tad.controller.ControladorPersonal;
+import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 import upo.tad.g11.proyecto.tad.model.entity.Personal;
+import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
+import upo.tad.g11.proyecto.tad.view.form.HabitacionForm;
 import upo.tad.g11.proyecto.tad.view.form.PersonalForm;
 
 @Theme("mytheme")
