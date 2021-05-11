@@ -16,15 +16,15 @@ public class Reserva implements Serializable {
 
     //Definicion de los atributos de la clase
     @Id
-    private ObjectId id;
-    private String fechaReserva;
-    private String fechaLlegada;
-    private String fechaSalida;
+    private ObjectId id = null;
+    private String fechaReserva = null;
+    private String fechaLlegada = null;
+    private String fechaSalida = null;
     private Double importe;
     @Reference
-    private Habitacion habitacion;
+    private Habitacion habitacion = null;
     @Reference
-    private Hotel hotel;
+    private Hotel hotel = null;
 
     /**
      * Constructor
@@ -140,6 +140,8 @@ public class Reserva implements Serializable {
         this.hotel = hotel;
     }
 
+    
+
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -147,7 +149,8 @@ public class Reserva implements Serializable {
      */
     @Override
     public String toString() {
-        return "Reserva{" + "id=" + id + ", fechaReserva=" + fechaReserva + ", fechaLlegada=" + fechaLlegada + ", fechaSalida=" + fechaSalida + ", importe=" + importe + ", habitacion=" + habitacion.toString() + '}';
+        return "Reserva{" + "id=" + id + ", fechaReserva=" + fechaReserva + ", fechaLlegada=" + fechaLlegada + ", fechaSalida=" + fechaSalida + ", importe=" + importe + ", habitacion=" + habitacion + ", hotel=" + hotel + '}';
     }
 
+    
 }

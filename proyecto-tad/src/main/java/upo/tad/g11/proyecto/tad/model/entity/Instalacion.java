@@ -3,6 +3,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
+import org.bson.types.ObjectId;
 
 /**
  * En esta clase se representa la estructura de una Instalacion
@@ -13,7 +14,7 @@ import dev.morphia.annotations.Reference;
 public class Instalacion {
 
     @Id
-    private String id;      //Id de la instalación
+    private ObjectId id;      //Id de la instalación
     private String nombre;  //Nombre de la instalacion
     private String tipo;   //Tipo de instalación
     private int aforo;      //Aforo de la instalación
@@ -29,7 +30,7 @@ public class Instalacion {
      * @param aforo
      * @param hotel
      */
-    public Instalacion(String id, String nombre, String tipo, int aforo, Hotel hotel) {
+    public Instalacion(ObjectId id, String nombre, String tipo, int aforo, Hotel hotel) {
         this.id = id;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -41,11 +42,11 @@ public class Instalacion {
         
     }
     
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
