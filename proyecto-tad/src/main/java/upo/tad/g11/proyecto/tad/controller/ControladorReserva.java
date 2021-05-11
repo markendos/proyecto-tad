@@ -1,8 +1,11 @@
 package upo.tad.g11.proyecto.tad.controller;
 
 import java.util.List;
+import upo.tad.g11.proyecto.tad.model.DAO.HabitacionDAO;
 import upo.tad.g11.proyecto.tad.model.DAO.ReservaDAO;
+import upo.tad.g11.proyecto.tad.model.DAO.TipoHabitacionDAO;
 import upo.tad.g11.proyecto.tad.model.entity.Reserva;
+import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 
 /**
  * Este controlador se encarga de gestionar las operaciones de las reservas
@@ -14,7 +17,7 @@ public class ControladorReserva implements Controlador<Reserva> {
 
     //Definicion de los atributos
     private ReservaDAO reservas = new ReservaDAO();
-
+    
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
      * en la BD
@@ -25,7 +28,19 @@ public class ControladorReserva implements Controlador<Reserva> {
             this.reservas.save(t);
         }
     }
-
+    /**
+     * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
+     * en la BD
+     *
+     */
+    public void add(Reserva t, TipoHabitacion tipo) {
+        if (reservas.get(t.getId()) == null) {
+            //Obtenemos las habitaciones de un tipo concreto y de un hotel concreto
+            HabitacionDAO habs = new HabitacionDAO();
+            habs.getHabitacionesby(h, tipo);
+            this.reservas.save(t);
+        }
+    }
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera
      * actualizado en la BD

@@ -3,6 +3,8 @@ package upo.tad.g11.proyecto.tad.model.DAO;
 import dev.morphia.Datastore;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
+import upo.tad.g11.proyecto.tad.model.entity.Hotel;
+import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 
 public class HabitacionDAO implements DAO<Habitacion> {
 
@@ -71,5 +73,14 @@ public class HabitacionDAO implements DAO<Habitacion> {
     @Override
     public void saveAll(List<Habitacion> t) {
         d.save(t);
+    }
+
+    public Habitacion getHabitacionesby(Hotel h, TipoHabitacion th) {
+
+        Habitacion habitacion = d.createQuery(Habitacion.class)
+                .field("hotel").equal(h)
+                .field("tipo").equal(th).first();
+
+        return habitacion;
     }
 }
