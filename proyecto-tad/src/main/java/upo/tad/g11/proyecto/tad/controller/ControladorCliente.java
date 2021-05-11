@@ -69,7 +69,7 @@ public class ControladorCliente implements Controlador<Cliente> {
 
     @Override
     public void addAll(List<Cliente> t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        clientes.saveAll(t);
     }
 
    
