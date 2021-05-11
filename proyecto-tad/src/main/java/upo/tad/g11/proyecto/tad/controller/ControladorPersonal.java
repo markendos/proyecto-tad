@@ -65,6 +65,6 @@ public class ControladorPersonal implements Controlador<Personal> {
 
     @Override
     public void addAll(List<Personal> t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        personal.saveAll(t);
     }
 }

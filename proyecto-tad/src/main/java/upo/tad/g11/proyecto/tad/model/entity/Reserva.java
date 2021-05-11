@@ -23,6 +23,8 @@ public class Reserva implements Serializable {
     private Double importe;
     @Reference
     private Habitacion habitacion;
+    @Reference
+    private Hotel hotel;
 
     /**
      * Constructor
@@ -33,14 +35,16 @@ public class Reserva implements Serializable {
      * @param fechaSalida
      * @param importe
      * @param habitacion
+     * @param hotel
      */
-    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion) {
+    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
         this.importe = importe;
         this.habitacion = habitacion;
+        this.hotel = hotel;
     }
 
     /**
@@ -50,19 +54,21 @@ public class Reserva implements Serializable {
      * @param fechaSalida
      * @param importe
      * @param habitacion
+     * @param hotel
      */
-    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion) {
+    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel) {
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
         this.importe = importe;
         this.habitacion = habitacion;
+        this.hotel = hotel;
     }
 
-    public Reserva(){
-        
+    public Reserva() {
+
     }
-    
+
     /*
     
     GETTERS Y SETTERS
@@ -114,6 +120,14 @@ public class Reserva implements Serializable {
 
     public void setHabitacion(Habitacion habitacion) {
         this.habitacion = habitacion;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
 
     /**

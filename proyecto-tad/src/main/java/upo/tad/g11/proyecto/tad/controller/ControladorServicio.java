@@ -67,6 +67,6 @@ public class ControladorServicio implements Controlador<Servicio> {
 
     @Override
     public void addAll(List<Servicio> t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        servicios.saveAll(t);
     }
 }
