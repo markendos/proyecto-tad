@@ -1,9 +1,13 @@
 package upo.tad.g11.proyecto.tad.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.HabitacionDAO;
 import upo.tad.g11.proyecto.tad.model.DAO.ReservaDAO;
 import upo.tad.g11.proyecto.tad.model.DAO.TipoHabitacionDAO;
+import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
 import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
 
@@ -17,7 +21,7 @@ public class ControladorReserva implements Controlador<Reserva> {
 
     //Definicion de los atributos
     private ReservaDAO reservas = new ReservaDAO();
-    
+
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
      * en la BD
@@ -28,19 +32,32 @@ public class ControladorReserva implements Controlador<Reserva> {
             this.reservas.save(t);
         }
     }
+
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera agregado
      * en la BD
      *
      */
-    public void add(Reserva t, TipoHabitacion tipo) {
+    public Reserva prepararReserva(Reserva t, TipoHabitacion tipo) {
         if (reservas.get(t.getId()) == null) {
             //Obtenemos las habitaciones de un tipo concreto y de un hotel concreto
             HabitacionDAO habs = new HabitacionDAO();
-            habs.getHabitacionesby(t.getHotel(), tipo);
-            this.reservas.save(t);
+            Habitacion h = habs.getHabitacionesby(t.getHotel(), tipo);
+            //Guardamos la hora de la reserva
+            String pattern = "MM/dd/yyyy HH:mm:ss";
+
+            // Create an instance of SimpleDateFormat used for formatting 
+            // the string representation of date according to the chosen pattern
+            DateFormat df = new SimpleDateFormat(pattern);
+            // Get the today date using Calendar object.
+            Calendar.getInstance().getTime();
+            
+            t.setFechaReserva(df.format(Calendar.getInstance().getTime()));
+            t.setHabitacion(h);
         }
+        return t;
     }
+
     /**
      * Metodo que formatea los datos y prepara un nuevo objeto que sera
      * actualizado en la BD
