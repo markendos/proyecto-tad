@@ -11,6 +11,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
@@ -18,7 +19,10 @@ import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.HeaderCell;
+import com.vaadin.ui.Grid.HeaderRow;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -43,11 +47,11 @@ import upo.tad.g11.proyecto.tad.view.form.ReservaForm;
 @Theme("mytheme")
 @Title("Clientes")
 public class GestionClientes extends UI {
-    
+
     Controlador controladorR = new ControladorReserva();
     Controlador controladorC = new ControladorCliente();
     Cliente clienteActual = null;
-    
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         // Obtenemos la sesion HTTP del usuario actual.
@@ -69,7 +73,7 @@ public class GestionClientes extends UI {
         itemCliente.addItemProperty("name", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("email", new ObjectProperty("", String.class));
         itemCliente.addItemProperty("telefono", new ObjectProperty("", String.class));
-        
+
         PropertysetItem itemReserva = new PropertysetItem();
         itemReserva.addItemProperty("fechaLlegada", new ObjectProperty(null, Date.class));
         itemReserva.addItemProperty("fechaSalida", new ObjectProperty(null, Date.class));
@@ -91,7 +95,7 @@ public class GestionClientes extends UI {
         Button crearClienteBtn = new Button("Crear Cliente");
         crearClienteBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         formCliente.addComponent(crearClienteBtn);
-        
+
         Button crearReservaBtn = new Button("Crear Reserva");
         crearReservaBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         formReserva.addComponent(crearReservaBtn);
@@ -106,7 +110,7 @@ public class GestionClientes extends UI {
             UI.getCurrent().getPage().setLocation("/menu");
         }
         );
-        
+
         vLayoutForm.addComponents(menuBtn, formCliente);
         vLayoutForm.addComponents(formReserva);
 
@@ -124,7 +128,7 @@ public class GestionClientes extends UI {
         // Contenedor para almacenar los beans de la entidad CRUD.
         BeanItemContainer<Reserva> beansReservas
                 = new BeanItemContainer<>(Reserva.class);
-        
+
         beansReservas.addNestedContainerProperty("hotel.nombre");
         beansReservas.addNestedContainerProperty("habitacion.numero");
 
@@ -143,6 +147,33 @@ public class GestionClientes extends UI {
         gridCliente.setHeightMode(HeightMode.ROW);
         gridCliente.setHeightByRows(5);
 
+        // Create a header row to hold column filters
+        HeaderRow filterRowClientes = gridCliente.appendHeaderRow();
+
+// Set up a filter for all columns
+        for (Object pid : gridCliente.getContainerDataSource()
+                .getContainerPropertyIds()) {
+            HeaderCell cell = filterRowClientes.getCell(pid);
+
+            // Have an input field to use for filter
+            TextField filterField = new TextField();
+            filterField.setColumns(8);
+
+            // Update filter When the filter input is changed
+            filterField.addTextChangeListener(change -> {
+                // Can't modify filters so need to replace
+                beansClientes.removeContainerFilters(pid);
+
+                // (Re)create the filter if necessary
+                if (!change.getText().isEmpty()) {
+                    beansClientes.addContainerFilter(
+                            new SimpleStringFilter(pid,
+                                    change.getText(), true, false));
+                }
+            });
+            cell.setComponent(filterField);
+        }
+
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
         gridReserva.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -153,19 +184,46 @@ public class GestionClientes extends UI {
         gridReserva.setHeightMode(HeightMode.ROW);
         gridReserva.setHeightByRows(5);
 
+        // Create a header row to hold column filters
+        HeaderRow filterRowReservas = gridReserva.appendHeaderRow();
+
+        // Set up a filter for all columns
+        for (Object pid : gridReserva.getContainerDataSource()
+                .getContainerPropertyIds()) {
+            HeaderCell cell = filterRowReservas.getCell(pid);
+
+            // Have an input field to use for filter
+            TextField filterField = new TextField();
+            filterField.setColumns(8);
+
+            // Update filter When the filter input is changed
+            filterField.addTextChangeListener(change -> {
+                // Can't modify filters so need to replace
+                beansReservas.removeContainerFilters(pid);
+
+                // (Re)create the filter if necessary
+                if (!change.getText().isEmpty()) {
+                    beansReservas.addContainerFilter(
+                            new SimpleStringFilter(pid,
+                                    change.getText(), true, false));
+                }
+            });
+            cell.setComponent(filterField);
+        }
+
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
-        Object[] VISIBLE_COLUMN_IDS = new String[]{"id", "fechaLlegada", "fechaSalida", "hotel.nombre", "habitacion.numero"};
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"fechaLlegada", "fechaSalida", "hotel.nombre", "habitacion.numero"};
         gridReserva.setColumns(VISIBLE_COLUMN_IDS);
-        
+
         Grid.Column llegadaColumn = gridReserva.getColumn("fechaLlegada");
         llegadaColumn.setHeaderCaption("Fecha de llegada");
-        
+
         Grid.Column salidaColumn = gridReserva.getColumn("fechaSalida");
         salidaColumn.setHeaderCaption("Fecha de salida");
-        
+
         Grid.Column hotelColumn = gridReserva.getColumn("hotel.nombre");
         hotelColumn.setHeaderCaption("Hotel");
-        
+
         Grid.Column habitacionColumn = gridReserva.getColumn("habitacion.numero");
         habitacionColumn.setHeaderCaption("Habitacion");
 
@@ -194,19 +252,19 @@ public class GestionClientes extends UI {
                     }
                     btnEliminar.setEnabled(false);
                 });
-        
+
         gridCliente.addSelectionListener(selectionEvent -> {
             if (gridCliente.getSelectedRows().size() == 1) {
                 List seleccion = (List) gridCliente.getSelectedRows();
                 clienteActual = (Cliente) seleccion.get(0);
             }
         });
-        
+
         gridCliente.getEditorFieldGroup().addCommitHandler(new FieldGroup.CommitHandler() {
             @Override
             public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
             }
-            
+
             @Override
             public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
                 Object itemId = gridCliente.getEditedItemId();
@@ -221,7 +279,7 @@ public class GestionClientes extends UI {
             String name = (String) binderCliente.getField("name").getValue();
             String email = (String) binderCliente.getField("email").getValue();
             String telefono = (String) binderCliente.getField("telefono").getValue();
-            
+
             Cliente c = new Cliente(dni, name, email, telefono);
             controladorC.add(c);
             beansClientes.addBean(c);
@@ -232,17 +290,17 @@ public class GestionClientes extends UI {
             // Create an instance of SimpleDateFormat used for formatting 
             // the string representation of date according to the chosen pattern
             DateFormat df = new SimpleDateFormat(pattern);
-            
+
             String fechaLlegada = df.format(binderReserva.getField("fechaLlegada").getValue());
             String fechaSalida = df.format(binderReserva.getField("fechaSalida").getValue());
             TipoHabitacion tipo = (TipoHabitacion) binderReserva.getField("tipoHabitacion").getValue();
             Hotel hotel = (Hotel) binderReserva.getField("hotel").getValue();
-            
+
             System.out.println(hotel);
-            
+
             Reserva r = new Reserva(fechaLlegada, fechaSalida);
             ControladorReserva cr = (ControladorReserva) controladorR;
-            cr.add(r, tipo);
+            cr.prepararReserva(r, tipo);
             //beansReservas.addBean(r);
             //beansClientes.addBean(c);
         });
@@ -274,10 +332,10 @@ public class GestionClientes extends UI {
         layout.setMargin(true);
         layout.setSpacing(true);
         layout.setWidth("100%");
-        
+
         setContent(layout);
     }
-    
+
     @WebServlet(value = {"/clientes/*"}, name = "GestionClientes", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = false, ui = GestionClientes.class)
     public static class GestionHotelesServlet extends VaadinServlet {

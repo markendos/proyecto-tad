@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * En esta clase se representa la estructura de un Cliente
@@ -19,7 +20,7 @@ public class Cliente implements Serializable {
     //Definicion de los atributos de la clase
     @Id
     private String dni;
-    private String name;
+    private String nombre;
     private String email;
     private String telefono;
     @Reference
@@ -29,14 +30,14 @@ public class Cliente implements Serializable {
      * Constructor
      *
      * @param dni
-     * @param name
+     * @param nombre
      * @param email
      * @param telefono
      * @param reservas
      */
-    public Cliente(String dni, String name, String email, String telefono, List<Reserva> reservas) {
+    public Cliente(String dni, String nombre, String email, String telefono, List<Reserva> reservas) {
         this.dni = dni;
-        this.name = name;
+        this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.reservas = reservas;
@@ -54,7 +55,7 @@ public class Cliente implements Serializable {
      * @param reservas
      */
     public Cliente(String name, String email, String telefono, List<Reserva> reservas) {
-        this.name = name;
+        this.nombre = name;
         this.email = email;
         this.telefono = telefono;
         this.reservas = reservas;
@@ -67,20 +68,20 @@ public class Cliente implements Serializable {
      * @param telefono
      */
     public Cliente(String name, String email, String telefono) {
-        this.name = name;
+        this.nombre = name;
         this.email = email;
         this.telefono = telefono;
         this.reservas = new ArrayList<Reserva>();
     }
     /**
      *
-     * @param name
+     * @param nombre
      * @param email
      * @param telefono
      */
-    public Cliente(String dni, String name, String email, String telefono) {
+    public Cliente(String dni, String nombre, String email, String telefono) {
         this.dni = dni;
-        this.name = name;
+        this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.reservas = new ArrayList<Reserva>();
@@ -99,12 +100,12 @@ public class Cliente implements Serializable {
         this.dni = dni;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getEmail() {
@@ -131,6 +132,31 @@ public class Cliente implements Serializable {
         this.reservas = reservas;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.dni);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cliente other = (Cliente) obj;
+        if (!Objects.equals(this.dni, other.dni)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Metodo que transforma el objeto DTO en cadena
      *
@@ -138,7 +164,7 @@ public class Cliente implements Serializable {
      */
     @Override
     public String toString() {
-        return "\nClienteDTO{" + "id=" + dni + ", name=" + name + ", email=" + email + ", telefono=" + telefono + ", reservas=" + Arrays.toString(reservas.toArray()) + '}';
+        return "\nClienteDTO{" + "id=" + dni + ", nombre=" + nombre + ", email=" + email + ", telefono=" + telefono + ", reservas=" + Arrays.toString(reservas.toArray()) + '}';
     }
 
 }
