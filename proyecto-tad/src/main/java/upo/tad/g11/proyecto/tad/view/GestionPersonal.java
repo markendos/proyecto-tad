@@ -26,7 +26,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Personal;
 import upo.tad.g11.proyecto.tad.view.form.PersonalForm;
 
 @Theme("mytheme")
-@Title("Habitaciones")
+@Title("Personal")
 public class GestionPersonal extends UI {
 
     Controlador controladorP = new ControladorPersonal();

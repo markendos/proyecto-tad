@@ -20,20 +20,16 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.bson.types.ObjectId;
 import upo.tad.g11.proyecto.tad.controller.Controlador;
-import upo.tad.g11.proyecto.tad.controller.ControladorHabitacion;
-import upo.tad.g11.proyecto.tad.controller.ControladorPersonal;
-import upo.tad.g11.proyecto.tad.model.entity.Habitacion;
+import upo.tad.g11.proyecto.tad.controller.ControladorInstalacion;
 import upo.tad.g11.proyecto.tad.model.entity.Hotel;
-import upo.tad.g11.proyecto.tad.model.entity.Personal;
-import upo.tad.g11.proyecto.tad.model.entity.TipoHabitacion;
-import upo.tad.g11.proyecto.tad.view.form.HabitacionForm;
-import upo.tad.g11.proyecto.tad.view.form.PersonalForm;
+import upo.tad.g11.proyecto.tad.model.entity.Instalacion;
+import upo.tad.g11.proyecto.tad.view.form.InstalacionForm;
 
 @Theme("mytheme")
-@Title("Habitaciones")
-public class GestionPersonal extends UI {
+@Title("Instalaciones")
+public class GestionInstalaciones extends UI {
 
-    Controlador controladorP = new ControladorPersonal();
+    Controlador controladorI = new ControladorInstalacion();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -53,14 +49,12 @@ public class GestionPersonal extends UI {
          */
         PropertysetItem item = new PropertysetItem();
         item.addItemProperty("nombre", new ObjectProperty("", String.class));
-        item.addItemProperty("puesto", new ObjectProperty("", String.class));
-        item.addItemProperty("salario", new ObjectProperty("", String.class));
-        item.addItemProperty("email", new ObjectProperty("", String.class));
-        item.addItemProperty("password", new ObjectProperty("", String.class));
+        item.addItemProperty("tipo", new ObjectProperty("", String.class));
+        item.addItemProperty("aforo", new ObjectProperty("", String.class));
         item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
-        PersonalForm form = new PersonalForm();
+        InstalacionForm form = new InstalacionForm();
 
         // Realizamos el binding del formulario entre la UI y el modelo asociado.
         FieldGroup binder = new FieldGroup(item);
@@ -90,8 +84,8 @@ public class GestionPersonal extends UI {
         VerticalLayout vLayoutTable = new VerticalLayout();
 
         // Contenedor para almacenar los beans de la entidad CRUD.
-        BeanItemContainer<Personal> beans
-                = new BeanItemContainer<>(Personal.class);
+        BeanItemContainer<Instalacion> beans
+                = new BeanItemContainer<>(Instalacion.class);
 
         beans.addNestedContainerProperty("hotel.nombre");
 
@@ -99,7 +93,7 @@ public class GestionPersonal extends UI {
         Grid grid = new Grid(beans);
 
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
-        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "puesto", "salario", "email", "password", "hotel.nombre",};
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "tipo", "aforo", "hotel.nombre",};
         grid.setColumns(VISIBLE_COLUMN_IDS);
         Grid.Column hotelColumn = grid.getColumn("hotel.nombre");
         hotelColumn.setHeaderCaption("Hotel");
@@ -131,7 +125,7 @@ public class GestionPersonal extends UI {
         // Elimina el/los elemento/s de la/s fila/s seleccionada/s al pulsa el boton de eliminar.
         btnEliminar.addClickListener((Button.ClickEvent event) -> {
                     for (Object itemId : grid.getSelectedRows()) {
-                        controladorP.delete(itemId);
+                        controladorI.delete(itemId);
                         beans.removeItem(itemId);
                     }
                     btnEliminar.setEnabled(false);
@@ -145,7 +139,7 @@ public class GestionPersonal extends UI {
             @Override
             public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
                 Object itemId = grid.getEditedItemId();
-                controladorP.update(itemId);
+                controladorI.update(itemId);
             }
         });
 
@@ -155,15 +149,13 @@ public class GestionPersonal extends UI {
                 -> {
             ObjectId id = new ObjectId();
             String nombre = (String) binder.getField("nombre").getValue();
-            String puesto = (String) binder.getField("puesto").getValue();
-            Integer salario = Integer.parseInt((String) binder.getField("salario").getValue());
-            String email = (String) binder.getField("email").getValue();
-            String password = (String) binder.getField("password").getValue();
+            String tipo = (String) binder.getField("tipo").getValue();
+            Integer aforo = Integer.parseInt((String) binder.getField("aforo").getValue());
             Hotel hotel = (Hotel) binder.getField("hotel").getValue();
 
-            Personal p = new Personal(id, nombre, puesto, salario, hotel, email, password);
-            beans.addBean(p);
-            controladorP.add(p);
+            Instalacion inst = new Instalacion(id, nombre, tipo, aforo, hotel);
+            beans.addBean(inst);
+            controladorI.add(inst);
         }
         );
 
@@ -194,11 +186,11 @@ public class GestionPersonal extends UI {
 
         setContent(layout);
         
-        beans.addAll(controladorP.listar());
+        beans.addAll(controladorI.listar());
     }
 
-    @WebServlet(value = {"/personal/*"}, name = "GestionPersonal", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = GestionPersonal.class)
-    public static class GestionPersonalServlet extends VaadinServlet {
+    @WebServlet(value = {"/instalaciones/*"}, name = "GestionInstalaciones", asyncSupported = true)
+    @VaadinServletConfiguration(productionMode = false, ui = GestionInstalaciones.class)
+    public static class GestionInstalacionesServlet extends VaadinServlet {
     }
 }
