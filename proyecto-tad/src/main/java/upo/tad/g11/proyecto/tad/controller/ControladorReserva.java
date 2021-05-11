@@ -37,7 +37,7 @@ public class ControladorReserva implements Controlador<Reserva> {
         if (reservas.get(t.getId()) == null) {
             //Obtenemos las habitaciones de un tipo concreto y de un hotel concreto
             HabitacionDAO habs = new HabitacionDAO();
-            habs.getHabitacionesby(h, tipo);
+            habs.getHabitacionesby(t.getHotel(), tipo);
             this.reservas.save(t);
         }
     }
