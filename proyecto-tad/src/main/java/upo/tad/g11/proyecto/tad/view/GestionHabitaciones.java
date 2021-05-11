@@ -5,21 +5,16 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -165,6 +160,7 @@ public class GestionHabitaciones extends UI {
 
             Habitacion h = new Habitacion(id, numero, fumador, tipo, hotel);
             beans.addBean(h);
+            controladorH.add(h);
         }
         );
 
