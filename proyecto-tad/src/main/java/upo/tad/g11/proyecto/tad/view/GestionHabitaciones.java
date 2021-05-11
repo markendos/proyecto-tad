@@ -17,6 +17,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
@@ -84,7 +85,7 @@ public class GestionHabitaciones extends UI {
 
         /*----------------------(END)FORMULARIO (create)-----------------------*/
 
-        /*--------------------TABLA (read, update, delete)--------------------*/
+ /*--------------------TABLA (read, update, delete)--------------------*/
         // Layout que servira de contenedor para la tabla de la entidad.
         VerticalLayout vLayoutTable = new VerticalLayout();
 
@@ -96,59 +97,61 @@ public class GestionHabitaciones extends UI {
         beans.addNestedContainerProperty("tipo.nombre");
 
         // Creamos la tabla y le asociamos el contenedor creado enteriormente.
-        Table table = new Table("Habitaciones", beans);
+        Grid grid = new Grid(beans);
+
+        // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"numero", "fumador", "hotel.nombre", "tipo.nombre"};
+        grid.setColumns(VISIBLE_COLUMN_IDS);
+        Grid.Column hotelColumn = grid.getColumn("hotel.nombre");
+        hotelColumn.setHeaderCaption("Hotel");
+        Grid.Column tipoColumn = grid.getColumn("tipo.nombre");
+        tipoColumn.setHeaderCaption("Tipo");
 
         // Establecemos las propiedades de la tabla para obtener el
         // comportamiento deseado.
-        table.setEditable(false);
-        table.setSelectable(true);
-        table.setImmediate(true);
-        table.setColumnReorderingAllowed(true);
-        table.setSizeFull();
-        table.setPageLength(table.size());
-        table.setColumnHeader("numero", "Nº de habitación");
-        table.setColumnHeader("fumador", "¿Fumador?");
-        table.setColumnHeader("hotel.nombre", "Hotel");
-        table.setColumnHeader("tipo.nombre", "Tipo");
-        table.setVisibleColumns("numero", "fumador", "hotel.nombre", "tipo.nombre");
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.setEditorEnabled(true);
+        grid.setImmediate(true);
+        grid.setColumnReorderingAllowed(true);
+        grid.setSizeFull();
 
-        // Anyadimos los componentes de control para realizar las acciones de
-        // editar y eliminar sobre los elementos de la tabla.
-        CheckBox editable = new CheckBox("Editar");
+        // Anyadimos los componentes de control para realizar la accion de
+        // eliminar sobre los elementos de la tabla.
         Button btnEliminar = new Button("Eliminar");
         btnEliminar.addStyleName(ValoTheme.BUTTON_DANGER);
         btnEliminar.setEnabled(false);
 
         //Lsteners para los elementos interactivos de la tabla:
         // Habilita el boton de eliminar al seleccionar una fila de la tabla.
-        table.addListener((ItemClickEvent.ItemClickListener) (ItemClickEvent event) -> {
-            btnEliminar.setEnabled(true);
+        grid.addSelectionListener(selectionEvent -> {
+            if (grid.getSelectedRows().size() > 0) {
+                btnEliminar.setEnabled(true);
+            } else {
+                btnEliminar.setEnabled(false);
+            }
         });
 
-        // Elimina el elemento de la fila seleccionada al pulsa el boton de eliminar.
-        btnEliminar.addClickListener((Button.ClickEvent event) -> {
-            Object itemId = table.getValue();
-            BeanItem<Habitacion> bean = beans.getItem(itemId);
-            Habitacion h = bean.getBean();
-            controladorH.delete(h);
-            beans.removeAllItems();
-            beans.addAll(controladorH.listar());
-            btnEliminar.setEnabled(false);
-        });
-
-        // Activa/desactiva el modo de edicion sobre la tabla.
-        editable.addValueChangeListener(
-                (Property.ValueChangeEvent event) -> {
-                    Boolean checked = (Boolean) event.getProperty().getValue();
-                    table.setEditable(checked);
-                    if (checked) {
-                        editable.setCaption("Guardar");
-                    } else {
-                        controladorH.addAll(beans.getItemIds());
-                        editable.setCaption("Editar");
+        // Elimina el/los elemento/s de la/s fila/s seleccionada/s al pulsa el boton de eliminar.
+        btnEliminar.addClickListener(
+                (Button.ClickEvent event) -> {
+                    for (Object itemId : grid.getSelectedRows()) {
+                        controladorH.delete(itemId);
+                        beans.removeItem(itemId);
                     }
-                }
-        );
+                    btnEliminar.setEnabled(false);
+                });
+
+        grid.getEditorFieldGroup().addCommitHandler(new FieldGroup.CommitHandler() {
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) throws FieldGroup.CommitException {
+                Object itemId = grid.getEditedItemId();
+                controladorH.update(itemId);
+            }
+        });
 
         // Mapea los valores de los campos del formulario a una nueva instancia de
         // la entidad CRUD y la anyade al contenedor de beans.
@@ -179,7 +182,7 @@ public class GestionHabitaciones extends UI {
         );
 
         // Anyadimos los componetes al layout de la tabla y se aplican los estilos.
-        vLayoutTable.addComponents(cerrarSesionBtn, table, editable, btnEliminar);
+        vLayoutTable.addComponents(cerrarSesionBtn, grid, btnEliminar);
         vLayoutTable.setSpacing(true);
 
         /*------------------(END)TABLA (read, update, delete)------------------*/
