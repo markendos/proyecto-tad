@@ -65,6 +65,16 @@ public class Reserva implements Serializable {
         this.hotel = hotel;
     }
 
+    /**
+     *
+     * @param fechaLlegada
+     * @param fechaSalida
+     */
+    public Reserva(String fechaLlegada, String fechaSalida) {
+        this.fechaLlegada = fechaLlegada;
+        this.fechaSalida = fechaSalida;
+    }
+
     public Reserva() {
 
     }
