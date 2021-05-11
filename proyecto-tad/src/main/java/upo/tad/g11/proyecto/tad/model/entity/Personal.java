@@ -8,6 +8,7 @@ package upo.tad.g11.proyecto.tad.model.entity;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
+import org.bson.types.ObjectId;
 
 /**
  * En esta clase se representa la estructura del Personal
@@ -18,7 +19,7 @@ import dev.morphia.annotations.Reference;
 public class Personal {
 
     @Id
-    private String id;      //Id del empleado
+    private ObjectId id;      //Id del empleado
     private String nombre;  //Nombre del empleado
     private String puesto;   //Puesto del empleado
     private int salario;    //Salario del empleado
@@ -37,7 +38,7 @@ public class Personal {
      * @param email
      * @param password
      */
-    public Personal(String id, String nombre, String puesto, int salario, Hotel hotel, String email, String password) {
+    public Personal(ObjectId id, String nombre, String puesto, int salario, Hotel hotel, String email, String password) {
         this.id = id;
         this.nombre = nombre;
         this.puesto = puesto;
@@ -51,11 +52,11 @@ public class Personal {
 
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
