@@ -4,7 +4,9 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * En esta clase se representa la estructura de un Servicio
@@ -17,10 +19,16 @@ public class Servicio implements Serializable{
     //Definicion de los atributos de la clase
     @Id
     private ObjectId id;
+    @NotEmpty
     private String nombre;
+    @NotEmpty
     private String descripcion;
+    @NotEmpty
     private String horario;
+    
     private Double tarifa;
+    
+    @NotNull
     @Reference
     private Hotel hotel;
 

@@ -14,9 +14,11 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -118,6 +120,7 @@ public class GestionEventos extends UI {
         grid.setWidth("100%");
         grid.setHeightMode(HeightMode.ROW);
         grid.setHeightByRows(10);
+        grid.getColumn("hotel.nombre").setEditable(false);
 
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
@@ -160,15 +163,23 @@ public class GestionEventos extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            ObjectId id = new ObjectId();
-            String nombre = (String) binder.getField("nombre").getValue();
-            String descripcion = (String) binder.getField("descripcion").getValue();
-            Date fecha = (Date) (binder.getField("fecha").getValue());
-            Hotel hotel = (Hotel) (binder.getField("hotel").getValue());
+            boolean valid = true;
+            for (Field field : binder.getFields()) {
+                valid &= field.isValid();
+            }
+            if (valid) {
+                ObjectId id = new ObjectId();
+                String nombre = (String) binder.getField("nombre").getValue();
+                String descripcion = (String) binder.getField("descripcion").getValue();
+                Date fecha = (Date) (binder.getField("fecha").getValue());
+                Hotel hotel = (Hotel) (binder.getField("hotel").getValue());
 
-            Evento ev = new Evento(id, nombre, descripcion, fecha, hotel);
-            beans.addBean(ev);
-            controladorE.add(ev);
+                Evento ev = new Evento(id, nombre, descripcion, fecha, hotel);
+                beans.addBean(ev);
+                controladorE.add(ev);
+            } else {
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
+            }
         }
         );
 

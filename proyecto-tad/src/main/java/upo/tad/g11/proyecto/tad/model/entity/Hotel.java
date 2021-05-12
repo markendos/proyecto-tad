@@ -9,6 +9,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import java.util.Objects;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * En esta clase se representa la estructura de un Hotel
@@ -19,8 +20,11 @@ import org.bson.types.ObjectId;
 public class Hotel {
     @Id
     private ObjectId id;      //Id para diferenciar los hoteles
+    @NotEmpty
     private String nombre;  //Nombre del hotel
+    @NotEmpty
     private String ubicacion;   //Ubicación del hotel
+    @NotEmpty
     private String calidad;     //Calidad del hotel
 
     /**
