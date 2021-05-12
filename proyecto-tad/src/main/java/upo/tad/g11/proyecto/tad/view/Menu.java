@@ -31,7 +31,8 @@ public class Menu extends UI {
         /*if (session.getAttribute("usuario") != null) {     //En caso de no existir una sesión activa, redirigimos al login
             UI.getCurrent().getPage().setLocation("/");
         }*/
-        String content = "<h1><strong>Menú</strong></h1><ul>";
+        String content = "<img src=\"https://i.ibb.co/5F2dsWB/Logo.png\"/>";
+        content += "<h1><strong>Menú</strong></h1><ul>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/hoteles" + "'><h2>Gestión de Hoteles</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/personal" + "'><h2>Gestión de Personal</h2></a></li>";
         content += "<li><a href='" + vaadinRequest.getContextPath() + "/instalaciones" + "'><h2>Gestión de Instalaciones</h2></a></li>";
@@ -57,7 +58,7 @@ public class Menu extends UI {
         }
         );
 
-        layout.addComponents(cerrarSesionBtn, label);
+        layout.addComponents(label, cerrarSesionBtn);
         layout.setSpacing(true);
         layout.setMargin(true);
         setContent(layout);

@@ -8,9 +8,11 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
@@ -37,7 +39,10 @@ public class Login extends UI {
         if (sesion.getAttribute("usuario") != null) {     //En caso de existir una sesión activa, redirigimos al menú
             UI.getCurrent().getPage().setLocation("/hoteles");
         }
+        String content = "<img src=\"https://i.ibb.co/5F2dsWB/Logo.png\"/>";
 
+        Label label = new Label(content, ContentMode.HTML);
+        loginForm.addComponent(label);
         //Formulario de inicio de sesion
         TextField tfEmail = new TextField("Email:");
         PasswordField tfPass = new PasswordField("Contraseña:");
