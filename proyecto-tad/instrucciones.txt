@@ -1,0 +1,14 @@
+Requisitos previos:
+- Apache Maven 3.6.3 con JDK 11.
+- Docker Engine + Docker Compose.
+
+Para desplegar la aplicación la aplicación con Docker debemos seguir los siguientes pasos:
+
+Accedemos a la raíz del repositorio (donde está ubicado el fichero pom.xml) y desde un terminal ejecutamos los siguientes comandos:
+
+-> mvn package
+
+-> docker-compose up
+
+
+ 
