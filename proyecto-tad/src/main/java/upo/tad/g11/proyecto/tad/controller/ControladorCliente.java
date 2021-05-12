@@ -4,7 +4,7 @@ import java.util.List;
 import upo.tad.g11.proyecto.tad.model.DAO.ClienteDAO;
 import upo.tad.g11.proyecto.tad.model.DAO.DAO;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
-
+import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 
 /**
  * Este controlador se encarga de gestionar las operaciones de los clientes
@@ -22,7 +22,6 @@ public class ControladorCliente implements Controlador<Cliente> {
      * en la BD
      *
      */
-    
     public void add(Cliente t) {
         if (clientes.get(t.getDni()) == null) {
             this.clientes.save(t);
@@ -44,7 +43,7 @@ public class ControladorCliente implements Controlador<Cliente> {
      *
      */
     public void delete(Cliente t) {
-        
+
         this.clientes.delete(t);
     }
 
@@ -64,13 +63,21 @@ public class ControladorCliente implements Controlador<Cliente> {
      */
     @Override
     public List listar() {
-        return clientes.getAll();
+        return this.clientes.getAll();
     }
 
     @Override
     public void addAll(List<Cliente> t) {
-        clientes.saveAll(t);
+        this.clientes.saveAll(t);
     }
 
-   
+    public void borrarReservaCliente(Reserva r) {
+        ClienteDAO cdao = (ClienteDAO) clientes;
+        //Obtenemos el cliente
+        Cliente c = cdao.get(r.getCliente().getDni());
+        //Eliminamos la reserva
+        c.getReservas().remove(r);
+        //Actualizamos el cliente
+        this.update(c);
+    }
 }

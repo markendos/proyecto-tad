@@ -1,8 +1,10 @@
 package upo.tad.g11.proyecto.tad.model.DAO;
 
 import dev.morphia.Datastore;
+import java.util.ArrayList;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.model.entity.Cliente;
+import upo.tad.g11.proyecto.tad.model.entity.Reserva;
 
 public class ClienteDAO implements DAO<Cliente> {
 
@@ -71,5 +73,16 @@ public class ClienteDAO implements DAO<Cliente> {
     @Override
     public void saveAll(List<Cliente> t) {
         d.save(t);
+    }
+
+    public Cliente getBy(Reserva r) {
+        List<Reserva> lr = new ArrayList<>();
+        lr.add(r);
+        Cliente c = d.createQuery(Cliente.class)
+                .field("reservas")
+                .hasThisOne(r).first();
+
+        return c;
+
     }
 }
