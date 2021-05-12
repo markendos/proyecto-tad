@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * En esta clase se representa la estructura de un Cliente
@@ -18,11 +20,17 @@ import java.util.Objects;
 public class Cliente implements Serializable {
 
     //Definicion de los atributos de la clase
+    @NotEmpty
     @Id
     private String dni;
+    @NotEmpty
     private String nombre;
+    @NotEmpty
+    @Email
     private String email;
+    @NotEmpty
     private String telefono;
+    
     @Reference
     private List<Reserva> reservas;
 

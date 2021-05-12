@@ -258,15 +258,14 @@ public class GestionClientes extends UI {
                     for (Object itemId : gridReserva.getSelectedRows()) {
                         //Borramos la reserva del cliente que la hizo
                         ControladorCliente cc = (ControladorCliente) controladorC;
-                        cc.borrarReservaCliente((Reserva) itemId);                        
+                        cc.borrarReservaCliente((Reserva) itemId);
                         //Borramos la reserva de la base de datos
                         controladorR.delete(itemId);
                         //Borramos la reserva de la tabla
                         beansReservas.removeItem(itemId);
-                        
-                        Cliente c =((Reserva) itemId).getCliente();
+
+                        Cliente c = ((Reserva) itemId).getCliente();
                         c.getReservas().remove((Reserva) itemId);
-                        
 
                     }
                     btnEliminar.setEnabled(false);
@@ -299,19 +298,27 @@ public class GestionClientes extends UI {
         // Mapea los valores de los campos del formulario a una nueva instancia de
         // la entidad CRUD y la anyade al contenedor de beans.
         crearClienteBtn.addClickListener(e -> {
-            String errores = comprobarFormularioClientes(binderCliente.getField("dni"), binderCliente.getField("nombre"), binderCliente.getField("email"), binderCliente.getField("telefono"));
+            boolean valid = true;
+            for (Field field : binderCliente.getFields()) {
+                valid &= field.isValid();
+            }
+            if (valid) {
+                String errores = comprobarFormularioClientes(binderCliente.getField("dni"), binderCliente.getField("nombre"), binderCliente.getField("email"), binderCliente.getField("telefono"));
 
-            if (errores.length() == 0) {
-                String dni = (String) binderCliente.getField("dni").getValue();
-                String nombre = (String) binderCliente.getField("nombre").getValue();
-                String email = (String) binderCliente.getField("email").getValue();
-                String telefono = (String) binderCliente.getField("telefono").getValue();
+                if (errores.length() == 0) {
+                    String dni = (String) binderCliente.getField("dni").getValue();
+                    String nombre = (String) binderCliente.getField("nombre").getValue();
+                    String email = (String) binderCliente.getField("email").getValue();
+                    String telefono = (String) binderCliente.getField("telefono").getValue();
 
-                Cliente c = new Cliente(dni, nombre, email, telefono);
-                controladorC.add(c);
-                beansClientes.addBean(c);
+                    Cliente c = new Cliente(dni, nombre, email, telefono);
+                    controladorC.add(c);
+                    beansClientes.addBean(c);
+                } else {
+                    Notification.show("Se ha producido un error", errores, Notification.Type.ERROR_MESSAGE);
+                }
             } else {
-                Notification.show("Se ha producido un error", errores, Notification.Type.ERROR_MESSAGE);
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
             }
         });
         crearReservaBtn.addClickListener(e -> {
