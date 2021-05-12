@@ -42,7 +42,10 @@ public class Cliente implements Serializable {
         this.telefono = telefono;
         this.reservas = reservas;
     }
-
+    public Cliente(String dni,List<Reserva> reservas) {
+        this.dni = dni;
+        this.reservas = reservas;
+    }
     public Cliente() {
 
     }

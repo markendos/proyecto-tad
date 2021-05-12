@@ -26,6 +26,8 @@ public class Reserva implements Serializable {
     private Habitacion habitacion = null;
     @Reference
     private Hotel hotel = null;
+    @Reference
+    private Cliente cliente = null;
 
     /**
      * Constructor
@@ -38,7 +40,7 @@ public class Reserva implements Serializable {
      * @param habitacion
      * @param hotel
      */
-    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel) {
+    public Reserva(ObjectId id, String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel, Cliente cliente) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
@@ -46,6 +48,7 @@ public class Reserva implements Serializable {
         this.importe = importe;
         this.habitacion = habitacion;
         this.hotel = hotel;
+        this.cliente = cliente;
     }
 
     /**
@@ -57,13 +60,14 @@ public class Reserva implements Serializable {
      * @param habitacion
      * @param hotel
      */
-    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel) {
+    public Reserva(String fechaReserva, String fechaLlegada, String fechaSalida, Double importe, Habitacion habitacion, Hotel hotel, Cliente cliente) {
         this.fechaReserva = fechaReserva;
         this.fechaLlegada = fechaLlegada;
         this.fechaSalida = fechaSalida;
         this.importe = importe;
         this.habitacion = habitacion;
         this.hotel = hotel;
+        this.cliente = cliente;
     }
 
     /**
@@ -141,7 +145,13 @@ public class Reserva implements Serializable {
         this.hotel = hotel;
     }
 
-    
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     /**
      * Metodo que transforma el objeto DTO en cadena
@@ -177,5 +187,5 @@ public class Reserva implements Serializable {
         }
         return true;
     }
-    
+
 }
