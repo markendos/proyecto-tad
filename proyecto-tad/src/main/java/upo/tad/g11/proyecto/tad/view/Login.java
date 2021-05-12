@@ -49,13 +49,22 @@ public class Login extends UI {
         Button submit = new Button("Acceder");
         submit.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
+        label.setSizeUndefined();
+
         //Guardamos el formulario en el layout
         loginForm.addComponents(tfEmail, tfPass, submit);
-        
+
+        VerticalLayout containerLayout = new VerticalLayout();
+        containerLayout.setWidth(null);
+
         // Creamos el panel de login
         Panel loginPanel = new Panel("Login");
         loginPanel.setContent(loginForm);
         loginPanel.setWidth(null);
+
+        containerLayout.addComponents(label, loginPanel);
+        containerLayout.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
+        containerLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
 
         //Listener para guardar la sesion
         submit.addClickListener(new Button.ClickListener() {
@@ -89,8 +98,8 @@ public class Login extends UI {
         //Layout de la pagina
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
-        layout.addComponent(loginPanel);
-        layout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+        layout.addComponent(containerLayout);
+        layout.setComponentAlignment(containerLayout, Alignment.MIDDLE_CENTER);
         setContent(layout);
     }
 
