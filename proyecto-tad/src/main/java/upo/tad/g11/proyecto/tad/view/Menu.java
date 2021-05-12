@@ -23,6 +23,10 @@ public class Menu extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
+        if (session.getAttribute("usuario") == null) {
+            //En caso de no existir una sesión activa, redirigimos al login
+            UI.getCurrent().getPage().setLocation("/");
+        }
 
         //Creamos el layout
         VerticalLayout layout = new VerticalLayout();
