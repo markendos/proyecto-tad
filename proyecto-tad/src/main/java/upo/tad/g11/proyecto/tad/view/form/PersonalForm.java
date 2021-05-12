@@ -27,6 +27,7 @@ public class PersonalForm extends FormLayout {
     public PersonalForm() {
         nombre.addValidator(new BeanValidator(Personal.class, "nombre"));
         puesto.addValidator(new BeanValidator(Personal.class, "puesto"));
+        salario.addValidator(new BeanValidator(Personal.class, "salario"));
         email.addValidator(new BeanValidator(Personal.class, "email"));
         password.addValidator(new BeanValidator(Personal.class, "password"));
         hotel.addValidator(new BeanValidator(Personal.class, "hotel"));

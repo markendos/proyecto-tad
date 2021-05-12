@@ -162,7 +162,7 @@ public class GestionPersonal extends UI {
                 -> {
             boolean valid = true;
             for (Field field : binder.getFields()) {
-                valid = valid &= field.isValid();
+                valid &= field.isValid();
             }
             if (valid) {
                 ObjectId id = new ObjectId();

@@ -4,6 +4,8 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import java.io.Serializable;
+import java.util.Objects;
+import javax.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 
 @Entity
@@ -16,9 +18,11 @@ public class Habitacion implements Serializable {
  
     private Boolean fumador; // True si la habitacion es apta para fumadores
 
+    @NotNull
     @Reference
     private TipoHabitacion tipo; // Referencia al tipo de habitacion de la instancia
 
+    @NotNull
     @Reference
     private Hotel hotel;
     
@@ -77,26 +81,32 @@ public class Habitacion implements Serializable {
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
-    
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Habitacion)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Habitacion other = (Habitacion) object;
-        return !((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Habitacion other = (Habitacion) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
-
+    
     @Override
     public String toString() {
         return "Habitacion{" + "id=" + id + ", numero=" + numero + ", fumador=" + fumador + ", tipo=" + tipo + ", hotel=" + hotel.toString() + '}';

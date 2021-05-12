@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package upo.tad.g11.proyecto.tad.model.entity;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.bson.types.ObjectId;
@@ -33,6 +26,7 @@ public class Personal {
     @NotEmpty
     private String puesto;   //Puesto del empleado
 
+    @NotNull
     private Float salario;    //Salario del empleado
 
     @NotEmpty

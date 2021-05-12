@@ -14,8 +14,10 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -57,8 +59,8 @@ public class GestionHabitaciones extends UI {
         PropertysetItem item = new PropertysetItem();
         item.addItemProperty("numero", new ObjectProperty("", String.class));
         item.addItemProperty("fumador", new ObjectProperty(false, Boolean.class));
-        item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
         item.addItemProperty("tipo", new ObjectProperty(null, TipoHabitacion.class));
+        item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
         HabitacionForm form = new HabitacionForm();
@@ -120,6 +122,9 @@ public class GestionHabitaciones extends UI {
         grid.setHeightMode(HeightMode.ROW);
         grid.setHeightByRows(10);
 
+        grid.getColumn("tipo.nombre").setEditable(false);
+        grid.getColumn("hotel.nombre").setEditable(false);
+
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
         Button btnEliminar = new Button("Eliminar");
@@ -162,15 +167,23 @@ public class GestionHabitaciones extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            ObjectId id = new ObjectId();
-            Integer numero = Integer.parseInt((String) binder.getField("numero").getValue());
-            Boolean fumador = (Boolean) binder.getField("fumador").getValue();
-            TipoHabitacion tipo = (TipoHabitacion) binder.getField("tipo").getValue();
-            Hotel hotel = (Hotel) binder.getField("hotel").getValue();
+            boolean valid = true;
+            for (Field field : binder.getFields()) {
+                valid &= field.isValid();
+            }
+            if (valid) {
+                ObjectId id = new ObjectId();
+                Integer numero = Integer.parseInt((String) binder.getField("numero").getValue());
+                Boolean fumador = (Boolean) binder.getField("fumador").getValue();
+                TipoHabitacion tipo = (TipoHabitacion) binder.getField("tipo").getValue();
+                Hotel hotel = (Hotel) binder.getField("hotel").getValue();
 
-            Habitacion h = new Habitacion(id, numero, fumador, tipo, hotel);
-            beans.addBean(h);
-            controladorH.add(h);
+                Habitacion h = new Habitacion(id, numero, fumador, tipo, hotel);
+                beans.addBean(h);
+                controladorH.add(h);
+            } else {
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
+            }
         }
         );
 
