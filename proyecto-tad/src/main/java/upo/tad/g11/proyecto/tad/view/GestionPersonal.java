@@ -5,9 +5,12 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -103,8 +106,9 @@ public class GestionPersonal extends UI {
         Grid grid = new Grid(beans);
 
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
-        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "puesto", "salario", "email", "password", "hotel.nombre",};
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "puesto", "salario", "email", "hotel.nombre",};
         grid.setColumns(VISIBLE_COLUMN_IDS);
+        
         Grid.Column hotelColumn = grid.getColumn("hotel.nombre");
         hotelColumn.setHeaderCaption("Hotel");
 
@@ -116,7 +120,6 @@ public class GestionPersonal extends UI {
         grid.setColumnReorderingAllowed(true);
         grid.setSizeFull();
 
-        grid.getColumn("password").setEditorField(new PasswordField());
         grid.getColumn("hotel.nombre").setEditable(false);
 
         // Anyadimos los componentes de control para realizar la accion de

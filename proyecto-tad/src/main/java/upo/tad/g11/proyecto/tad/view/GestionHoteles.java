@@ -14,6 +14,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -21,6 +22,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.Arrays;
 import org.bson.types.ObjectId;
 import upo.tad.g11.proyecto.tad.controller.Controlador;
 import upo.tad.g11.proyecto.tad.controller.ControladorHotel;
@@ -57,6 +59,8 @@ public class GestionHoteles extends UI {
         item.addItemProperty("id", new ObjectProperty("", String.class));
         item.addItemProperty("nombre", new ObjectProperty("", String.class));
         item.addItemProperty("ubicacion", new ObjectProperty("", String.class));
+        item.addItemProperty("tipo", new ObjectProperty("Hotel", String.class));
+        item.addItemProperty("zona", new ObjectProperty("", String.class));
         item.addItemProperty("calidad", new ObjectProperty("", String.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
@@ -97,7 +101,7 @@ public class GestionHoteles extends UI {
         Grid grid = new Grid(beans);
 
         // Seleccionamos las columnas a visualizar y renombramos las que sean necesarias
-        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "ubicacion", "calidad"};
+        Object[] VISIBLE_COLUMN_IDS = new String[]{"nombre", "ubicacion","tipo", "zona", "calidad"};
         grid.setColumns(VISIBLE_COLUMN_IDS);
 
         // Establecemos las propiedades de la tabla para obtener el
@@ -109,6 +113,10 @@ public class GestionHoteles extends UI {
         grid.setWidth("100%");
         grid.setHeightMode(HeightMode.ROW);
         grid.setHeightByRows(10);
+        
+        grid.getColumn("tipo").setEditorField(new ComboBox("Tipo", Arrays.asList("Hotel", "Hostal", "Resort")));
+        grid.getColumn("zona").setEditorField(new ComboBox("Zona", Arrays.asList("Playa", "Rural", "Ciudad", "Aeropuerto", "Otro")));
+        grid.getColumn("calidad").setEditorField(new ComboBox("Calidad", Arrays.asList("1", "2", "3", "4", "5")));
 
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
@@ -160,9 +168,11 @@ public class GestionHoteles extends UI {
                 ObjectId id = new ObjectId();
                 String nombre = (String) binder.getField("nombre").getValue();
                 String ubicacion = (String) binder.getField("ubicacion").getValue();
+                String tipo = (String) binder.getField("tipo").getValue();
+                String zona = (String) binder.getField("zona").getValue();
                 String calidad = (String) binder.getField("calidad").getValue();
 
-                Hotel h = new Hotel(id, nombre, ubicacion, calidad);
+                Hotel h = new Hotel(id, nombre, ubicacion, tipo, zona, calidad);
                 controladorHotel.add(h);
                 beans.addBean(h);
             } else {

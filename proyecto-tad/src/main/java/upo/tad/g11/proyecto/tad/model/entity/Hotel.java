@@ -18,12 +18,22 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 public class Hotel {
+
     @Id
     private ObjectId id;      //Id para diferenciar los hoteles
+
     @NotEmpty
     private String nombre;  //Nombre del hotel
+
     @NotEmpty
     private String ubicacion;   //Ubicación del hotel
+
+    @NotEmpty
+    private String tipo;
+
+    @NotEmpty
+    private String zona;
+
     @NotEmpty
     private String calidad;     //Calidad del hotel
 
@@ -33,19 +43,24 @@ public class Hotel {
      * @param id
      * @param nombre
      * @param ubicacion
+     * @param tipo
+     * @param zona
      * @param calidad
      */
-    public Hotel(ObjectId id, String nombre, String ubicacion, String calidad) {
+    public Hotel(ObjectId id, String nombre, String ubicacion, String tipo,
+            String zona, String calidad) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
+        this.tipo = tipo;
+        this.zona = zona;
         this.calidad = calidad;
     }
 
-    public Hotel(){
-        
+    public Hotel() {
+
     }
-    
+
     public ObjectId getId() {
         return id;
     }
@@ -68,6 +83,22 @@ public class Hotel {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
     }
 
     public String getCalidad() {
@@ -106,8 +137,8 @@ public class Hotel {
      */
     @Override
     public String toString() {
-        return "Hotel{id=" + id + ", nombre=" + nombre + ", ubicacion=" + ubicacion + ", calidad=" + calidad + '}';
+        return "Hotel{" + "id=" + id + ", nombre=" + nombre + ", ubicacion="
+                + ubicacion + ", tipo=" + tipo + ", zona=" + zona + ", calidad=" + calidad + '}';
     }
-    
-    
+
 }
