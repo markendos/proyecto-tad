@@ -14,8 +14,10 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -36,7 +38,7 @@ public class GestionHoteles extends UI {
         // Obtenemos la sesion HTTP del usuario actual.
         WrappedSession session = getSession().getSession();
 
-        if (session.getAttribute("usuario") == null) {    
+        if (session.getAttribute("usuario") == null) {
             //En caso de no existir una sesión activa, redirigimos al login
             UI.getCurrent().getPage().setLocation("/");
         }
@@ -150,14 +152,22 @@ public class GestionHoteles extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            ObjectId id = new ObjectId();
-            String nombre = (String) binder.getField("nombre").getValue();
-            String ubicacion = (String) binder.getField("ubicacion").getValue();
-            String calidad = (String) binder.getField("calidad").getValue();
+            boolean valid = true;
+            for (Field field : binder.getFields()) {
+                valid &= field.isValid();
+            }
+            if (valid) {
+                ObjectId id = new ObjectId();
+                String nombre = (String) binder.getField("nombre").getValue();
+                String ubicacion = (String) binder.getField("ubicacion").getValue();
+                String calidad = (String) binder.getField("calidad").getValue();
 
-            Hotel h = new Hotel(id, nombre, ubicacion, calidad);
-            controladorHotel.add(h);
-            beans.addBean(h);
+                Hotel h = new Hotel(id, nombre, ubicacion, calidad);
+                controladorHotel.add(h);
+                beans.addBean(h);
+            } else {
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
+            }
         }
         );
 

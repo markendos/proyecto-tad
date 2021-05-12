@@ -3,7 +3,9 @@ package upo.tad.g11.proyecto.tad.model.entity;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
+import javax.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * En esta clase se representa la estructura de una Instalacion
@@ -15,9 +17,13 @@ public class Instalacion {
 
     @Id
     private ObjectId id;      //Id de la instalación
+    @NotEmpty
     private String nombre;  //Nombre de la instalacion
+    @NotEmpty
     private String tipo;   //Tipo de instalación
+    @NotEmpty
     private int aforo;      //Aforo de la instalación
+    @NotNull
     @Reference
     private Hotel hotel; // Referencia al hotel de la instancia
 

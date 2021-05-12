@@ -13,8 +13,10 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -55,7 +57,7 @@ public class GestionInstalaciones extends UI {
         PropertysetItem item = new PropertysetItem();
         item.addItemProperty("nombre", new ObjectProperty("", String.class));
         item.addItemProperty("tipo", new ObjectProperty("", String.class));
-        item.addItemProperty("aforo", new ObjectProperty("", String.class));
+        item.addItemProperty("aforo", new ObjectProperty("0", String.class));
         item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
 
         // Instanciamos un nuevo componente que contendra los campos del formulario
@@ -111,6 +113,8 @@ public class GestionInstalaciones extends UI {
         grid.setColumnReorderingAllowed(true);
         grid.setSizeFull();
 
+        grid.getColumn("hotel.nombre").setEditable(false);
+
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
         Button btnEliminar = new Button("Eliminar");
@@ -152,15 +156,23 @@ public class GestionInstalaciones extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            ObjectId id = new ObjectId();
-            String nombre = (String) binder.getField("nombre").getValue();
-            String tipo = (String) binder.getField("tipo").getValue();
-            Integer aforo = Integer.parseInt((String) binder.getField("aforo").getValue());
-            Hotel hotel = (Hotel) binder.getField("hotel").getValue();
+            boolean valid = true;
+            for (Field field : binder.getFields()) {
+                valid &= field.isValid();
+            }
+            if (valid) {
+                ObjectId id = new ObjectId();
+                String nombre = (String) binder.getField("nombre").getValue();
+                String tipo = (String) binder.getField("tipo").getValue();
+                Integer aforo = Integer.parseInt((String) binder.getField("aforo").getValue());
+                Hotel hotel = (Hotel) binder.getField("hotel").getValue();
 
-            Instalacion inst = new Instalacion(id, nombre, tipo, aforo, hotel);
-            beans.addBean(inst);
-            controladorI.add(inst);
+                Instalacion inst = new Instalacion(id, nombre, tipo, aforo, hotel);
+                beans.addBean(inst);
+                controladorI.add(inst);
+            } else {
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
+            }
         }
         );
 

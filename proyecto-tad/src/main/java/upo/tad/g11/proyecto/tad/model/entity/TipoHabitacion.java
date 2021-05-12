@@ -5,6 +5,7 @@ import dev.morphia.annotations.Id;
 import java.io.Serializable;
 import java.util.Objects;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class TipoHabitacion implements Serializable {
@@ -12,6 +13,7 @@ public class TipoHabitacion implements Serializable {
     @Id
     private ObjectId id; // Identificador unico de una instancia
 
+    @NotEmpty
     private String nombre; // Nombre del tipo de habitacion: simple, doble, suite...
 
     private Float metros; // Metros cuadrados de las habitaciones de ese tipo

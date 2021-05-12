@@ -1,6 +1,7 @@
 package upo.tad.g11.proyecto.tad.view.form;
 
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import java.util.List;
 import upo.tad.g11.proyecto.tad.controller.Controlador;
@@ -10,6 +11,7 @@ import upo.tad.g11.proyecto.tad.model.entity.Hotel;
 public class ClienteForm extends FormLayout {
 
     // Campos del formulario
+    Label descripcion = new Label("Gestion de clientes");
     TextField dni = new TextField("DNI");
     TextField nombre = new TextField("Nombre");
     TextField email = new TextField("Correo electronico");
@@ -18,7 +20,7 @@ public class ClienteForm extends FormLayout {
     // Constructor por defecto
     public ClienteForm() {
         setSpacing(true);
-        addComponents(dni, nombre, email, telefono);
+        addComponents(descripcion,dni, nombre, email, telefono);
     }
 
     private List<Hotel> getClientes() {

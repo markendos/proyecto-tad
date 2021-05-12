@@ -5,20 +5,23 @@ import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class Evento implements Serializable {
 
     @Id
     private ObjectId id; // Identificador unico de una instancia
-    
+    @NotEmpty
     private String nombre; // Nombre del evento
-    
+    @NotEmpty
     private String descripcion; // Descripcion del evento
-    
+    @NotNull
     private Date fecha; // Fecha de realizacion del evento
     
+    @NotNull
     @Reference
     private Hotel hotel;
 
