@@ -8,23 +8,42 @@ package upo.tad.g11.proyecto.tad.model.entity;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import dev.morphia.annotations.Reference;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * En esta clase se representa la estructura del Personal
  *
- * @author Alvaro
+ * @author Grupo XI
  */
 @Entity
 public class Personal {
 
     @Id
     private ObjectId id;      //Id del empleado
+
+    @NotEmpty
     private String nombre;  //Nombre del empleado
+
+    @NotEmpty
     private String puesto;   //Puesto del empleado
-    private int salario;    //Salario del empleado
+
+    private Float salario;    //Salario del empleado
+
+    @NotEmpty
+    @Email
     private String email;
+
+    @NotEmpty
+    @Size(min = 5, max = 10)
     private String password;
+
+    @NotNull
     @Reference
     private Hotel hotel; // Referencia al hotel de la instancia
 
@@ -38,7 +57,7 @@ public class Personal {
      * @param email
      * @param password
      */
-    public Personal(ObjectId id, String nombre, String puesto, int salario, Hotel hotel, String email, String password) {
+    public Personal(ObjectId id, String nombre, String puesto, Float salario, Hotel hotel, String email, String password) {
         this.id = id;
         this.nombre = nombre;
         this.puesto = puesto;
@@ -76,11 +95,11 @@ public class Personal {
         this.puesto = puesto;
     }
 
-    public int getSalario() {
+    public Float getSalario() {
         return salario;
     }
 
-    public void setSalario(int salario) {
+    public void setSalario(Float salario) {
         this.salario = salario;
     }
 

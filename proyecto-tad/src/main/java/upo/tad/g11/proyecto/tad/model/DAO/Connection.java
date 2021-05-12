@@ -15,6 +15,7 @@ public final class Connection {
     public static Datastore getConnection() {
         if (datastore == null) {
             Morphia morphia = new Morphia();
+            //datastore = morphia.createDatastore(new MongoClient("mongodb"), "TAD_Proyecto");
             datastore = morphia.createDatastore(new MongoClient(), "TAD_Proyecto");
             datastore.ensureIndexes();
         }

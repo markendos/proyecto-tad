@@ -13,8 +13,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -55,7 +58,7 @@ public class GestionPersonal extends UI {
         PropertysetItem item = new PropertysetItem();
         item.addItemProperty("nombre", new ObjectProperty("", String.class));
         item.addItemProperty("puesto", new ObjectProperty("", String.class));
-        item.addItemProperty("salario", new ObjectProperty("", String.class));
+        item.addItemProperty("salario", new ObjectProperty("0.0", String.class));
         item.addItemProperty("email", new ObjectProperty("", String.class));
         item.addItemProperty("password", new ObjectProperty("", String.class));
         item.addItemProperty("hotel", new ObjectProperty(null, Hotel.class));
@@ -113,6 +116,9 @@ public class GestionPersonal extends UI {
         grid.setColumnReorderingAllowed(true);
         grid.setSizeFull();
 
+        grid.getColumn("password").setEditorField(new PasswordField());
+        grid.getColumn("hotel.nombre").setEditable(false);
+
         // Anyadimos los componentes de control para realizar la accion de
         // eliminar sobre los elementos de la tabla.
         Button btnEliminar = new Button("Eliminar");
@@ -154,17 +160,25 @@ public class GestionPersonal extends UI {
         // la entidad CRUD y la anyade al contenedor de beans.
         crearBtn.addClickListener(e
                 -> {
-            ObjectId id = new ObjectId();
-            String nombre = (String) binder.getField("nombre").getValue();
-            String puesto = (String) binder.getField("puesto").getValue();
-            Integer salario = Integer.parseInt((String) binder.getField("salario").getValue());
-            String email = (String) binder.getField("email").getValue();
-            String password = (String) binder.getField("password").getValue();
-            Hotel hotel = (Hotel) binder.getField("hotel").getValue();
+            boolean valid = true;
+            for (Field field : binder.getFields()) {
+                valid = valid &= field.isValid();
+            }
+            if (valid) {
+                ObjectId id = new ObjectId();
+                String nombre = (String) binder.getField("nombre").getValue();
+                String puesto = (String) binder.getField("puesto").getValue();
+                Float salario = Float.parseFloat((String) binder.getField("salario").getValue());
+                String email = (String) binder.getField("email").getValue();
+                String password = (String) binder.getField("password").getValue();
+                Hotel hotel = (Hotel) binder.getField("hotel").getValue();
 
-            Personal p = new Personal(id, nombre, puesto, salario, hotel, email, password);
-            beans.addBean(p);
-            controladorP.add(p);
+                Personal p = new Personal(id, nombre, puesto, salario, hotel, email, password);
+                beans.addBean(p);
+                controladorP.add(p);
+            } else {
+                Notification.show("Los datos no son válidos", "Revise los campos del fomulario", Notification.Type.ERROR_MESSAGE);
+            }
         }
         );
 
